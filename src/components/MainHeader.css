@@ -1,0 +1,31 @@
+.title{
+    height:41px;
+    /*background: #FAECC5;*/
+    padding-top: 1rem;
+}
+
+.title_main{
+    padding: 3.5rem;
+    color: #355400;
+    font-size: 1.4rem;
+    font-weight: 550;
+    display: inline;
+}
+
+.title_layout, .title_package{
+    padding: 2.2rem;
+    color: #ad9b9b;
+    font-size: 1.2rem;
+    font-weight: 500;
+    display: inline;
+}
+.title_template{
+    padding: 2.2rem;
+    color: #f1873a;
+    font-size: 1.2rem;
+    font-weight: 500;
+    display: inline;
+}
+.title_template:hover, .title_layout:hover, .title_package:hover{
+    color: #f1873a;
+}
