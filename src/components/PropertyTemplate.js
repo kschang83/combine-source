@@ -11,7 +11,7 @@ import TogglePadding from "./TogglePadding.js";
 import ToggleMargin from "./ToggleMargin.js";
 import ToggleColor from "./ToggleColor.js";
 
-const PropertyTemplate = ({ editDatas, onInsert, activeTab }) => {
+const PropertyTemplate = ({ editDatas, insert }) => {
   const [datas, setDatas] = useState({
     ID: "",
     TITLE: "",
@@ -198,7 +198,7 @@ const PropertyTemplate = ({ editDatas, onInsert, activeTab }) => {
 
   // 저장
   const save = () => {
-    onInsert(datas);
+    insert(datas);
   };
 
   return (

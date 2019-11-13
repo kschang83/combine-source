@@ -4,7 +4,7 @@ import { insert } from "../modules/templatePropData";
 import PropertyTemplate from "../components/PropertyTemplate";
 
 const TemplatePropDataContainer = ({ templateDatas, insert }) => {
-  return <PropertyTemplate editDatas={templateDatas} onInsert={insert} />;
+  return <PropertyTemplate editDatas={templateDatas} insert={insert} />;
 };
 
 export default connect(

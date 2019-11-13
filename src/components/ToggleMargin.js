@@ -1,13 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import "./TemplateEditor.css";
 
 //component 속성 - Margin
 const ToggleMargin = margin => {
   const [valEdit, setValue] = useState({
-    pop_margin_top_input: margin.marginInfo.MARGINTOP,
-    pop_margin_right_input: margin.marginInfo.MARGINRIGHT,
-    pop_margin_bottom_input: margin.marginInfo.MARGINBOTTOM,
-    pop_margin_left_input: margin.marginInfo.MARGINLEFT
+    pop_margin_top_input: 0,
+    pop_margin_right_input: 0,
+    pop_margin_bottom_input: 0,
+    pop_margin_left_input: 0
   });
 
   const {
@@ -49,15 +50,6 @@ const ToggleMargin = margin => {
         pop_margin_left_input: margin.marginInfo.MARGINLEFT
       });
     }
-  });
-
-  useEffect(() => {
-    setValue({
-      pop_margin_top_input: margin.marginInfo.MARGINTOP,
-      pop_margin_right_input: margin.marginInfo.MARGINRIGHT,
-      pop_margin_bottom_input: margin.marginInfo.MARGINBOTTOM,
-      pop_margin_left_input: margin.marginInfo.MARGINLEFT
-    });
   }, [margin.title]);
 
   return (

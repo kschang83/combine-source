@@ -15,6 +15,8 @@ const MainBodyLeftListArea = () => {
     setTabIndex(idx);
   };
 
+  const showListComponent = "text";
+
   return (
     <Tabs selectedIndex={tabIndex} onSelect={handleOnSelectTab}>
       <TabList>
@@ -29,7 +31,7 @@ const MainBodyLeftListArea = () => {
         <ListTemplate />
       </TabPanel>
       <TabPanel forceRender={true}>
-        <ListComponent isPopupUse={false} />
+        <ListComponent isPopupUse={false} showList={showListComponent} />
       </TabPanel>
     </Tabs>
   );

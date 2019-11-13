@@ -1,5 +1,5 @@
-import React, { Component, useState, useMemo, useEffect } from "react";
-import ReactDOM from "react-dom";
+import React, { Component } from "react";
+//import ReactDOM from "react-dom";
 import PropertyComponentText from "./PropertyComponentText.js";
 import PropertyComponentImage from "./PropertyComponentImage.js";
 import PropertyComponentVideo from "./PropertyComponentVideo.js";

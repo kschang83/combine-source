@@ -1,13 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import "./TemplateEditor.css";
 
 //component 속성 - padding
 const TogglePadding = padding => {
   const [valEdit, setValue] = useState({
-    pop_padding_top_input: padding.paddingInfo.PADDINGTOP,
-    pop_padding_right_input: padding.paddingInfo.PADDINGRIGHT,
-    pop_padding_bottom_input: padding.paddingInfo.PADDINGBOTTOM,
-    pop_padding_left_input: padding.paddingInfo.PADDINGLEFT
+    pop_padding_top_input: 0,
+    pop_padding_right_input: 0,
+    pop_padding_bottom_input: 0,
+    pop_padding_left_input: 0
   });
 
   const {
@@ -48,22 +49,15 @@ const TogglePadding = padding => {
         pop_padding_left_input: padding.paddingInfo.PADDINGLEFT
       });
     }
-  });
-
-  useEffect(() => {
-    setValue({
-      pop_padding_top_input: padding.paddingInfo.PADDINGTOP,
-      pop_padding_right_input: padding.paddingInfo.PADDINGRIGHT,
-      pop_padding_bottom_input: padding.paddingInfo.PADDINGBOTTOM,
-      pop_padding_left_input: padding.paddingInfo.PADDINGLEFT
-    });
   }, [padding.title]);
 
   return (
     <div className="pop_padding">
       <div className="pop_padding_top">padding-top</div>
       <input
+        type="number"
         className="pop_padding_top_input"
+        name="pop_padding_top_input"
         value={pop_padding_top_input}
         onChange={handleVal}
       />

@@ -9,6 +9,7 @@ import ComponentEditorVideo from "./ComponentEditorVideo.js";
 
 const OpenDialogComponentEditor = ({
   isOpen,
+  openParents,
   openType,
   editInfos,
   editDatas,
@@ -17,34 +18,36 @@ const OpenDialogComponentEditor = ({
   const [isOpenDlg, setIsOpenDlg] = useState(false);
   const [datas, setDatas] = useState({
     editingType: "new",
-    isNew: false,
+    dialogTitle: "컴포넌트 생성",
     isText: false,
     isImage: false,
-    isVideo: false
+    isVideo: false,
+    componentEditDatas: {}
   });
 
-  const { editingType, isNew, isText, isImage, isVideo } = datas;
-
-  console.log("OpenDialogComponentEditor -- info");
-  console.log("isOpen", isOpen);
-  console.log("openType", openType);
-  console.log("editInfos", editInfos);
-  console.log("callbackFunc", callbackFunc);
-  console.log("datas", datas);
-  console.log("isOpenDlg", isOpenDlg);
-  console.log("---------------------------");
+  const {
+    editingType,
+    dialogTitle,
+    isText,
+    isImage,
+    isVideo,
+    componentEditDatas
+  } = datas;
 
   useEffect(() => {
+    console.log("OpenDialogComponentEditor useEffect");
     setIsOpenDlg(isOpen);
 
-    let isNewFlag;
+    let title;
     switch (openType) {
       case "new":
-        isNewFlag = true;
+        title = "컴포넌트 생성";
+        break;
+      case "copy":
+        title = "컴포넌트 복제";
         break;
       case "edit":
-      case "copy":
-        isNewFlag = false;
+        title = "컴포넌트 편집";
         break;
       default:
         break;
@@ -56,44 +59,39 @@ const OpenDialogComponentEditor = ({
         setDatas({
           ...datas,
           editingType: openType,
-          isNew: isNewFlag,
+          dialogTitle: title,
           isText: true,
           isImage: false,
-          isVideo: false
+          isVideo: false,
+          componentEditDatas: editDatas
         });
         break;
       case "image":
         setDatas({
           ...datas,
           editingType: openType,
-          isNew: isNewFlag,
+          dialogTitle: title,
           isText: false,
           isImage: true,
-          isVideo: false
+          isVideo: false,
+          componentEditDatas: editDatas
         });
         break;
       case "video":
         setDatas({
           ...datas,
           editingType: openType,
-          isNew: isNewFlag,
+          dialogTitle: title,
           isText: false,
           isImage: false,
-          isVideo: true
+          isVideo: true,
+          componentEditDatas: editDatas
         });
         break;
       default:
         break;
     }
-
-    console.log("OpenDialogComponentEditor -- useEffect");
-    console.log("isOpen", isOpen);
-    console.log("openType", openType);
-    console.log("editInfos", editInfos);
-    console.log("callbackFunc", callbackFunc);
-    console.log("datas", datas);
-    console.log("isOpenDlg", isOpenDlg);
-    console.log("---------------------------");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
   const handleCloseDialogComponentEditor = e => {
@@ -102,6 +100,75 @@ const OpenDialogComponentEditor = ({
     callbackFunc(false);
     // state 초기화
   };
+
+  const callbackPropsEditData = (eTarget, eType, eData) => {
+    console.log("callback - 컴포넌트 모달다이얼로그 에디터");
+    console.log(" = eType", eType);
+    console.log(" = eData", eData);
+
+    let dTitle;
+    switch (eType) {
+      case "new":
+        dTitle = "컴포넌트 생성";
+        break;
+      case "copy":
+        dTitle = "컴포넌트 복제";
+        break;
+      case "edit":
+        dTitle = "컴포넌트 편집";
+        break;
+      default:
+        break;
+    }
+
+    switch (eTarget) {
+      case "text":
+        setDatas({
+          ...datas,
+          editingType: eType,
+          dialogTitle: dTitle,
+          isText: true,
+          isImage: false,
+          isVideo: false,
+          componentEditDatas: eData
+        });
+        break;
+      case "image":
+        setDatas({
+          ...datas,
+          editingType: eType,
+          dialogTitle: dTitle,
+          isText: false,
+          isImage: true,
+          isVideo: false,
+          componentEditDatas: eData
+        });
+        break;
+      case "video":
+        setDatas({
+          ...datas,
+          editingType: eType,
+          dialogTitle: dTitle,
+          isText: false,
+          isImage: false,
+          isVideo: true,
+          componentEditDatas: eData
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
+  console.log("OpenDialogComponentEditor return 직전 ++");
+  console.log(" - isOpen", isOpen);
+  console.log(" - openParents", openParents);
+  console.log(" - openType", openType);
+  console.log(" - editInfos", editInfos);
+  console.log(" - editDatas", editDatas);
+  console.log(" - callbackFunc", callbackFunc);
+  console.log(" - isOpenDlg", isOpenDlg);
+  console.log(" - datas", datas);
 
   return (
     <ReactModalDialog
@@ -112,7 +179,7 @@ const OpenDialogComponentEditor = ({
     >
       <div className="componentAddBox">
         <div className="componentAddTitle">
-          {isNew ? "Component 생성" : "Component 편집"}
+          {dialogTitle}
           <button
             className="componentAdd_cancle"
             onClick={handleCloseDialogComponentEditor}
@@ -122,26 +189,30 @@ const OpenDialogComponentEditor = ({
         </div>
         <div className="listSection">
           <div className="component_tab">Component</div>
-          <ListComponent isPopupUse={true} />
+          <ListComponent
+            isPopupUse={true}
+            showList={editInfos.target}
+            callbackPropsEditData={callbackPropsEditData}
+          />
         </div>
 
         <div className="componentAdding" id="componentAdding">
           {isText ? (
             <ComponentEditorText
               editingType={editingType}
-              editingDatas={editDatas}
+              editingDatas={componentEditDatas}
             />
           ) : null}
           {isImage ? (
             <ComponentEditorImage
               editingType={editingType}
-              editingDatas={editDatas}
+              editingDatas={componentEditDatas}
             />
           ) : null}
           {isVideo ? (
             <ComponentEditorVideo
               editingType={editingType}
-              editingDatas={editDatas}
+              editingDatas={componentEditDatas}
             />
           ) : null}
         </div>

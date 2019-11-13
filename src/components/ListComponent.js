@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./TemplateEditor.css";
 import "./TemplateEditorMain.css";
 
@@ -6,10 +6,8 @@ import ListComponentText from "./ListComponentText.js";
 import ListComponentImage from "./ListComponentImage.js";
 import ListComponentVideo from "./ListComponentVideo.js";
 
-const ListComponent = ({ isPopupUse }) => {
+const ListComponent = ({ isPopupUse, showList, callbackPropsEditData }) => {
   const [componentDatas, setComponentDatas] = useState({
-    popEdit: false,
-    popType: "",
     TEXT: [
       {
         CATEGORY: "제목",
@@ -925,8 +923,7 @@ const ListComponent = ({ isPopupUse }) => {
     isVideo: false
   });
 
-  const { popEdit, popType, TEXT, IMAGE, VIDEO } = componentDatas;
-
+  const { TEXT, IMAGE, VIDEO } = componentDatas;
   const { selectType, isText, isImage, isVideo } = selectDatas;
 
   const handleComponentSel = e => {
@@ -973,6 +970,49 @@ const ListComponent = ({ isPopupUse }) => {
     }
   };
 
+  useEffect(() => {
+    if (isPopupUse) {
+      switch (showList) {
+        case "text":
+          setSelectDatas({
+            ...selectDatas,
+            selectType: showList,
+            isText: true,
+            isImage: false,
+            isVideo: false
+          });
+          break;
+        case "image":
+          setSelectDatas({
+            ...selectDatas,
+            selectType: showList,
+            isText: false,
+            isImage: true,
+            isVideo: false
+          });
+          break;
+        case "video":
+          setSelectDatas({
+            ...selectDatas,
+            selectType: showList,
+            isText: false,
+            isImage: false,
+            isVideo: true
+          });
+          break;
+        default:
+          break;
+      }
+    }
+  }, []);
+
+  const callbackEditData = (editingTarget, editingType, editingDatas) => {
+    console.log("callback - 리스트 컴포넌트");
+    console.log(" = editingType", editingType);
+    console.log(" = editingDatas", editingDatas);
+    callbackPropsEditData(editingTarget, editingType, editingDatas);
+  };
+
   return (
     <div>
       <select
@@ -987,7 +1027,11 @@ const ListComponent = ({ isPopupUse }) => {
       </select>
       <div>
         {isText ? (
-          <ListComponentText textData={TEXT} isPopupUse={isPopupUse} />
+          <ListComponentText
+            textData={TEXT}
+            isPopupUse={isPopupUse}
+            callbackEditData={callbackEditData}
+          />
         ) : null}
         {isImage ? (
           <ListComponentImage imageData={IMAGE} isPopupUse={isPopupUse} />

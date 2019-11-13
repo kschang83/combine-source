@@ -1,4 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+
 import "./TemplateEditor.css";
 import downArrow from "../img/arrow-down-sign-to-navigate.png";
 import leftArray from "../img/aligned-to-the-left.png";
@@ -164,19 +168,95 @@ const ComponentEditorText = ({ editingType, editingDatas }) => {
     });
   };
 
+  const closeDialog = () => {
+    confirmAlert({
+      title: "컴포넌트 에디터 - 닫기",
+      message:
+        "신규 컴포넌트 생성을 중지하시겠습니까? 확인 버튼을 클릭하면 모든 작업이 취소되고, 에디터 다이얼로그는 닫힙니다.",
+      buttons: [
+        {
+          label: "확인",
+          onClick: () => {
+            alert("다이얼로그 닫고, state 초기화 할것");
+          }
+        },
+        {
+          label: "취소"
+        }
+      ]
+    });
+  };
+
   const reset = () => {
-    alert("초기화");
-    console.log("컴포넌트 초기화 처리");
+    confirmAlert({
+      title: "컴포넌트 에디터 - 데이터 초기화",
+      message:
+        "편집하기 전 상태(마지막 편집 저장 상태의 데이터)의 데이터로 되돌리시겠습니까?",
+      buttons: [
+        {
+          label: "확인",
+          onClick: () => {
+            alert("편집 전 상태의 데이터로 변경");
+          }
+        },
+        {
+          label: "취소"
+        }
+      ]
+    });
   };
 
   const save = () => {
-    alert("저장");
-    console.log("컴포넌트 저장 처리");
+    let title;
+    switch (isCreate) {
+      case "new":
+        title = "신규 생성";
+        break;
+      case "edit":
+        title = "저장";
+        break;
+      case "copy":
+        title = "복제";
+        break;
+      default:
+        break;
+    }
+    confirmAlert({
+      title: "컴포넌트 에디터 - " + title,
+      message:
+        "현재 작업한 속성 데이터를 기반으로 컴포넌트 " +
+        title +
+        " 하시겠습니까?",
+      buttons: [
+        {
+          label: "확인",
+          onClick: () => {
+            alert("컴포넌트 저장 프로세스 태우고, 다이얼로그 닫기");
+          }
+        },
+        {
+          label: "취소"
+        }
+      ]
+    });
   };
 
   const deleteComponent = () => {
-    window.confirm("정말로 컴포넌트를 삭제하시겠습니까?");
-    console.log("컴포넌트 삭제(사용안함) 처리");
+    confirmAlert({
+      title: "컴포넌트 에디터 - 삭제",
+      message: "해당 컴포넌트를 정말로 삭제(사용안함) 하시겠습니까?",
+      buttons: [
+        {
+          label: "확인",
+          onClick: () => {
+            alert("컴포넌트 삭제 프로세스 태우고, 다이얼로그 닫기");
+          }
+        },
+        {
+          label: "취소"
+        }
+      ]
+    });
   };
 
   return (
@@ -432,17 +512,39 @@ const ComponentEditorText = ({ editingType, editingDatas }) => {
           />
         </div>
       </div>
-      <div className="prop_button">
-        <button className="prop_reset" onClick={reset}>
-          초기화
-        </button>
-        <button className="prop_delete" onClick={deleteComponent}>
-          삭제
-        </button>
-        <button className="prop_save" onClick={save}>
-          저장
-        </button>
-      </div>
+      {isCreate === "new" ? (
+        <div className="prop_button">
+          <button className="prop_delete" onClick={closeDialog}>
+            취소
+          </button>
+          <button className="prop_save" onClick={save}>
+            생성
+          </button>
+        </div>
+      ) : null}
+      {isCreate === "edit" ? (
+        <div className="prop_button">
+          <button className="prop_reset" onClick={reset}>
+            초기화
+          </button>
+          <button className="prop_delete" onClick={deleteComponent}>
+            삭제
+          </button>
+          <button className="prop_save" onClick={save}>
+            저장
+          </button>
+        </div>
+      ) : null}
+      {isCreate === "copy" ? (
+        <div className="prop_button">
+          <button className="prop_delete" onClick={reset}>
+            초기화
+          </button>
+          <button className="prop_save" onClick={save}>
+            복제
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 };

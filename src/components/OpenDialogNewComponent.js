@@ -143,6 +143,7 @@ const OpenDialogNewComponent = ({ openType }) => {
       default:
         break;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openType]);
 
   const handleOnChange = e => {
@@ -211,11 +212,11 @@ const OpenDialogNewComponent = ({ openType }) => {
   };
 
   const handleOpenComponentEditDialog = e => {
+    setIsOpenDlg(false);
     setDatas({
       ...datas,
       isOpenEditor: true
     });
-    setIsOpenDlg(false);
 
     setEditDatas({
       ...editDatas,

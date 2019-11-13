@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
+//import ReactDOM from "react-dom";
 import "./TemplateEditor.css";
 
 //Component Editor Dialog - 속성 고정

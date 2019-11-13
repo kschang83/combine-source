@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+//import DatePicker from "react-datepicker";
+//import "react-datepicker/dist/react-datepicker.css";
 
 import "./TemplateEditor.css";
 import downArrow from "../img/arrow-down-sign-to-navigate.png";

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import "./TemplateEditor.css";
 
@@ -5,16 +6,6 @@ import "./TemplateEditor.css";
 const ToggleBorder = border => {
   const [width, setValue] = useState(0);
   const [borderStyle, setStyle] = useState("none");
-
-  //select option 관리 (border style)
-  const handleChange = e => {
-    setStyle(e.target.value);
-  };
-
-  //input text 관리 (border width)
-  const handleVal = e => {
-    setValue(e.target.value);
-  };
 
   //초기화
   useEffect(() => {
@@ -30,12 +21,17 @@ const ToggleBorder = border => {
       setValue(border.borderInfo.BORDERWIDTH);
       setStyle(border.borderInfo.BORDERSTYLE);
     }
-  });
-
-  useEffect(() => {
-    setValue(border.borderInfo.BORDERWIDTH);
-    setStyle(border.borderInfo.BORDERSTYLE);
   }, [border.title]);
+
+  //select option 관리 (border style)
+  const handleChange = e => {
+    setStyle(e.target.value);
+  };
+
+  //input text 관리 (border width)
+  const handleVal = e => {
+    setValue(e.target.value);
+  };
 
   return (
     <div className="pop_border">
@@ -43,6 +39,7 @@ const ToggleBorder = border => {
       <input
         type="number"
         className="pop_border_width_input"
+        name="width"
         value={width}
         onChange={handleVal}
       />

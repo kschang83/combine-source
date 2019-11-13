@@ -11,7 +11,7 @@ const TemplateEditDataContainer = ({
   return (
     <MainBodyCenterTemplateEditor
       editDatas={templateDatas}
-      onInsert={insert}
+      insert={insert}
       setActiveTab={setActivePropTab}
     />
   );
