@@ -1,16 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import "./TemplateEditor.css";
+import "./ListComponentText.css";
 
 import OpenDialogNewComponent from "./OpenDialogNewComponent.js";
 import OpenDialogComponentEditor from "./OpenDialogComponentEditor.js";
 
 //text 유형의 component list 버튼화
-const ListComponentText = ({ textData, isPopupUse, callbackEditData }) => {
+const ListComponentText = ({
+  textData,
+  isPopupUse,
+  callbackEditData,
+  selectedEditDatas
+}) => {
   const newDialogOpenType = "text";
   const [datas, setDatas] = useState({
+    nowSelectedId: "",
+    nowSelectedAction: "",
     choiceId: "",
     choiceInfo: {
       target: newDialogOpenType
@@ -24,12 +32,27 @@ const ListComponentText = ({ textData, isPopupUse, callbackEditData }) => {
     editDialogOpenType: "edit"
   });
 
-  const { choiceId, choiceInfo, choiceData } = datas;
+  const {
+    nowSelectedId,
+    nowSelectedAction,
+    choiceId,
+    choiceInfo,
+    choiceData
+  } = datas;
   const {
     isOpenEditor,
     editDialogOpenParents,
     editDialogOpenType
   } = editDialogDatas;
+
+  useEffect(() => {
+    setDatas({
+      ...datas,
+      nowSelectedId: selectedEditDatas.ID,
+      nowSelectedAction: selectedEditDatas.ACTION,
+      choiceData: selectedEditDatas
+    });
+  }, [selectedEditDatas.ID, selectedEditDatas.ACTION]);
 
   const clickListItem = () => {
     console.log("리스트 클릭했을 경우 css 변경 처리"); // 추후....
@@ -64,7 +87,11 @@ const ListComponentText = ({ textData, isPopupUse, callbackEditData }) => {
       }
     >
       <button
-        className="pop_compo"
+        className={
+          isPopupUse && nowSelectedId === component.ID
+            ? "pop_compo selectedItem"
+            : "pop_compo"
+        }
         key={"popup_" + component.ID}
         onClick={clickListItem}
       >
@@ -130,25 +157,41 @@ const ListComponentText = ({ textData, isPopupUse, callbackEditData }) => {
   };
 
   const onActionConfirm = (action, lookupData) => {
-    setDatas({
-      ...datas,
-      choiceInfo: {
-        target: newDialogOpenType
-      },
-      choiceData: lookupData
-    });
+    console.log("확인을 누를때...");
+    console.log(" - action ", action);
+    console.log(" - lookupData[0] ", lookupData[0]);
+    console.log(" - selectedEditDatas.ID ", selectedEditDatas.ID);
+    console.log(" - selectedEditDatas.ACTION ", selectedEditDatas.ACTION);
 
-    setEditDialogDatas({
-      ...editDialogDatas,
-      editDialogOpenParents: "listPopup",
-      editDialogOpenType: action
-    });
+    let check = true;
+    if (selectedEditDatas.ID === lookupData[0].ID) {
+      if (selectedEditDatas.ACTION === action) {
+        alert("동일한 작업을 하지마세요!!!");
+        check = false;
+      }
+    }
 
-    console.log("callback 호출 - 리스트 컴포넌트 텍스트");
-    console.log(" = editingeditDialogOpenTypeType", action);
-    console.log(" = choiceData", lookupData[0]);
+    if (check) {
+      setDatas({
+        ...datas,
+        choiceInfo: {
+          target: newDialogOpenType
+        },
+        choiceData: lookupData
+      });
 
-    callbackEditData(newDialogOpenType, action, lookupData[0]);
+      setEditDialogDatas({
+        ...editDialogDatas,
+        editDialogOpenParents: "listPopup",
+        editDialogOpenType: action
+      });
+
+      console.log("callback 호출 - 리스트 컴포넌트 텍스트");
+      console.log(" = editingeditDialogOpenTypeType", action);
+      console.log(" = choiceData", lookupData[0]);
+
+      callbackEditData(newDialogOpenType, action, lookupData[0]);
+    }
   };
 
   const callbackSetFlag = flag => {
@@ -159,8 +202,10 @@ const ListComponentText = ({ textData, isPopupUse, callbackEditData }) => {
     });
   };
 
-  console.log("isOpenEditor", isOpenEditor);
-  console.log("isPopupUse", isPopupUse);
+  console.log("ListComponetText");
+  console.log(" - datas ", datas);
+  console.log(" - editDialogDatas ", editDialogDatas);
+  console.log(" - selectedEditDatas ", selectedEditDatas);
 
   return (
     <div className="compoSection">

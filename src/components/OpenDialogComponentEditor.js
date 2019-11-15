@@ -22,7 +22,11 @@ const OpenDialogComponentEditor = ({
     isText: false,
     isImage: false,
     isVideo: false,
-    componentEditDatas: {}
+    componentEditDatas: {},
+    selectedEditDatas: {
+      ID: "",
+      ACTION: ""
+    }
   });
 
   const {
@@ -31,7 +35,8 @@ const OpenDialogComponentEditor = ({
     isText,
     isImage,
     isVideo,
-    componentEditDatas
+    componentEditDatas,
+    selectedEditDatas
   } = datas;
 
   useEffect(() => {
@@ -63,7 +68,11 @@ const OpenDialogComponentEditor = ({
           isText: true,
           isImage: false,
           isVideo: false,
-          componentEditDatas: editDatas
+          componentEditDatas: editDatas,
+          selectedEditDatas: {
+            ID: editDatas.ID,
+            ACTION: openType
+          }
         });
         break;
       case "image":
@@ -74,7 +83,11 @@ const OpenDialogComponentEditor = ({
           isText: false,
           isImage: true,
           isVideo: false,
-          componentEditDatas: editDatas
+          componentEditDatas: editDatas,
+          selectedEditDatas: {
+            ID: editDatas.ID,
+            ACTION: openType
+          }
         });
         break;
       case "video":
@@ -85,7 +98,11 @@ const OpenDialogComponentEditor = ({
           isText: false,
           isImage: false,
           isVideo: true,
-          componentEditDatas: editDatas
+          componentEditDatas: editDatas,
+          selectedEditDatas: {
+            ID: editDatas.ID,
+            ACTION: openType
+          }
         });
         break;
       default:
@@ -130,7 +147,11 @@ const OpenDialogComponentEditor = ({
           isText: true,
           isImage: false,
           isVideo: false,
-          componentEditDatas: eData
+          componentEditDatas: eData,
+          selectedEditDatas: {
+            ID: eData.ID,
+            ACTION: eType
+          }
         });
         break;
       case "image":
@@ -141,7 +162,11 @@ const OpenDialogComponentEditor = ({
           isText: false,
           isImage: true,
           isVideo: false,
-          componentEditDatas: eData
+          componentEditDatas: eData,
+          selectedEditDatas: {
+            ID: eData.ID,
+            ACTION: eType
+          }
         });
         break;
       case "video":
@@ -152,7 +177,11 @@ const OpenDialogComponentEditor = ({
           isText: false,
           isImage: false,
           isVideo: true,
-          componentEditDatas: eData
+          componentEditDatas: eData,
+          selectedEditDatas: {
+            ID: eData.ID,
+            ACTION: eType
+          }
         });
         break;
       default:
@@ -193,6 +222,7 @@ const OpenDialogComponentEditor = ({
             isPopupUse={true}
             showList={editInfos.target}
             callbackPropsEditData={callbackPropsEditData}
+            selectedEditDatas={selectedEditDatas}
           />
         </div>
 

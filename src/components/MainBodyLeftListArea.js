@@ -16,6 +16,10 @@ const MainBodyLeftListArea = () => {
   };
 
   const showListComponent = "text";
+  const selectedEditDatas = {
+    ID: "",
+    ACTION: ""
+  };
 
   return (
     <Tabs selectedIndex={tabIndex} onSelect={handleOnSelectTab}>
@@ -31,7 +35,11 @@ const MainBodyLeftListArea = () => {
         <ListTemplate />
       </TabPanel>
       <TabPanel forceRender={true}>
-        <ListComponent isPopupUse={false} showList={showListComponent} />
+        <ListComponent
+          isPopupUse={false}
+          showList={showListComponent}
+          selectedEditDatas={selectedEditDatas}
+        />
       </TabPanel>
     </Tabs>
   );

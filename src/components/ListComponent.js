@@ -6,7 +6,12 @@ import ListComponentText from "./ListComponentText.js";
 import ListComponentImage from "./ListComponentImage.js";
 import ListComponentVideo from "./ListComponentVideo.js";
 
-const ListComponent = ({ isPopupUse, showList, callbackPropsEditData }) => {
+const ListComponent = ({
+  isPopupUse,
+  showList,
+  callbackPropsEditData,
+  selectedEditDatas
+}) => {
   const [componentDatas, setComponentDatas] = useState({
     TEXT: [
       {
@@ -920,11 +925,18 @@ const ListComponent = ({ isPopupUse, showList, callbackPropsEditData }) => {
     selectType: "text",
     isText: true,
     isImage: false,
-    isVideo: false
+    isVideo: false,
+    selectedEditingData: {}
   });
 
   const { TEXT, IMAGE, VIDEO } = componentDatas;
-  const { selectType, isText, isImage, isVideo } = selectDatas;
+  const {
+    selectType,
+    isText,
+    isImage,
+    isVideo,
+    selectedEditingData
+  } = selectDatas;
 
   const handleComponentSel = e => {
     const name = e.target.name;
@@ -1006,6 +1018,13 @@ const ListComponent = ({ isPopupUse, showList, callbackPropsEditData }) => {
     }
   }, []);
 
+  useEffect(() => {
+    setSelectDatas({
+      ...selectDatas,
+      selectedEditingData: selectedEditDatas
+    });
+  }, [selectedEditDatas.ID, selectedEditDatas.ACTION]);
+
   const callbackEditData = (editingTarget, editingType, editingDatas) => {
     console.log("callback - 리스트 컴포넌트");
     console.log(" = editingType", editingType);
@@ -1031,6 +1050,7 @@ const ListComponent = ({ isPopupUse, showList, callbackPropsEditData }) => {
             textData={TEXT}
             isPopupUse={isPopupUse}
             callbackEditData={callbackEditData}
+            selectedEditDatas={selectedEditingData}
           />
         ) : null}
         {isImage ? (
