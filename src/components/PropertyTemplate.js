@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import downArrow from "../img/arrow-down-sign-to-navigate.png";
 import "./TemplateEditor.css";
 import "./TemplateEditorMain.css";
+import "./PropertyTemplate.css";
 
 import ToggleBorder from "./ToggleBorder.js";
 import TogglePadding from "./TogglePadding.js";
 import ToggleMargin from "./ToggleMargin.js";
 import ToggleColor from "./ToggleColor.js";
 
-const PropertyTemplate = ({ editDatas, insert }) => {
+const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
   const [datas, setDatas] = useState({
     ID: "",
     TITLE: "",
@@ -203,124 +204,137 @@ const PropertyTemplate = ({ editDatas, insert }) => {
 
   return (
     <div className="TemplateProp">
-      <div className="property_section">
-        <input
-          type="text"
-          className="propName"
-          name="TITLE"
-          value={TITLE}
-          onChange={handleOnChange}
-        />
-        <div className="propTitle">{ID}</div>
-        <div className="boxTitle">Box</div>
-        <div className="prop_width_tx">width</div>{" "}
-        <input
-          type="number"
-          className="prop_width"
-          name="WIDTH"
-          value={WIDTH}
-          onChange={handleOnChange}
-        />
-        <div className="prop_width_px">px</div>
-        <div className="prop_height_tx">height</div>{" "}
-        <input
-          type="number"
-          className="prop_height"
-          name="HEIGHT"
-          value={HEIGHT}
-          onChange={handleOnChange}
-        />
-        <div className="prop_height_px">px</div>
-        <div className="borderTitle">border</div>{" "}
-        <img
-          className="border_pop"
-          src={downArrow}
-          alt={"down"}
-          onClick={() => handleOnClick("borderPop")}
-        />
-        <div style={styleBorderPop}>
-          <ToggleBorder
-            borderInfo={boxBorder}
-            title={TITLE}
-            isReset={isReset}
-          />
-        </div>
-        <div className="paddingTitle">padding</div>{" "}
-        <img
-          className="padding_pop"
-          src={downArrow}
-          alt={"down"}
-          onClick={() => handleOnClick("paddingPop")}
-        />
-        <div style={stylePaddingPop}>
-          <TogglePadding
-            paddingInfo={boxPadding}
-            title={TITLE}
-            isReset={isReset}
-          />
-        </div>
-        <div className="marginTitle">margin</div>{" "}
-        <img
-          className="margin_pop"
-          src={downArrow}
-          alt={"down"}
-          onClick={() => handleOnClick("marginPop")}
-        />
-        <div style={styleMarginPop}>
-          <ToggleMargin
-            marginInfo={boxMargin}
-            title={TITLE}
-            isReset={isReset}
-          />
-        </div>
-        <div className="backgroundTitle">background-color</div>{" "}
-        <img
-          className="color_pop"
-          src={downArrow}
-          alt={"down"}
-          onClick={() => handleOnClick("colorPop")}
-        />
-        <div style={styleColorPop}>
-          <ToggleColor />
-        </div>
-        <div className="composition">구성 컴포넌트</div>
-        <div className="tx">TEXT</div>{" "}
-        <div className="txComp">{txComponents} </div>
-        <div className="img">IMAGE</div>{" "}
-        <div className="imgComp">{imgComponents}</div>
-        <div className="vid">VIDEO</div>{" "}
-        <div className="vidComp">{vidComponents}</div>
-        <div className="regTitle">등록정보</div>
-        <div className="regDateTx">등록일</div>
-        <DatePicker
-          className="regDate"
-          dateFormat="yyyy/MM/dd"
-          selected={startDate}
-          onChange={date => setStartDate(date)}
-        />
-        <div className="regNameTx">등록자</div>
-        <input
-          className="propRegName"
-          value={regName}
-          onChange={handleOnChange}
-        />
-        <div className="mappingTitle">매핑정보</div>
-        <div className="field_tx">필드명</div>{" "}
-        <input
-          className="field_input"
-          value={mappingField}
-          onChange={handleOnChange}
-        />
-      </div>
-      <div className="prop_button">
-        <button className="prop_reset" onClick={reset}>
-          초기화
-        </button>
-        <button className="prop_delete">삭제</button>
-        <button className="prop_save" onClick={save}>
-          저장
-        </button>
-      </div>
+      {initialStatus ? null : (
+        <Fragment>
+          <div className="property_section">
+            <input
+              type="text"
+              className="propName"
+              name="TITLE"
+              value={TITLE}
+              onChange={handleOnChange}
+            />
+            <div className="propTitle">{ID}</div>
+            <div className="boxTitle">Box</div>
+            <div className="prop_width_tx">width</div>{" "}
+            <input
+              type="number"
+              className="prop_width"
+              name="WIDTH"
+              value={WIDTH}
+              onChange={handleOnChange}
+            />
+            <div className="prop_width_px">px</div>
+            <div className="prop_height_tx">height</div>{" "}
+            <input
+              type="number"
+              className="prop_height"
+              name="HEIGHT"
+              value={HEIGHT}
+              onChange={handleOnChange}
+            />
+            <div className="prop_height_px">px</div>
+            <div className="borderTitle">border</div>{" "}
+            <img
+              className="border_pop"
+              src={downArrow}
+              alt={"down"}
+              onClick={() => handleOnClick("borderPop")}
+            />
+            <div style={styleBorderPop}>
+              <ToggleBorder
+                borderInfo={boxBorder}
+                title={TITLE}
+                isReset={isReset}
+              />
+            </div>
+            <div className="paddingTitle">padding</div>{" "}
+            <img
+              className="padding_pop"
+              src={downArrow}
+              alt={"down"}
+              onClick={() => handleOnClick("paddingPop")}
+            />
+            <div style={stylePaddingPop}>
+              <TogglePadding
+                paddingInfo={boxPadding}
+                title={TITLE}
+                isReset={isReset}
+              />
+            </div>
+            <div className="marginTitle">margin</div>{" "}
+            <img
+              className="margin_pop"
+              src={downArrow}
+              alt={"down"}
+              onClick={() => handleOnClick("marginPop")}
+            />
+            <div style={styleMarginPop}>
+              <ToggleMargin
+                marginInfo={boxMargin}
+                title={TITLE}
+                isReset={isReset}
+              />
+            </div>
+            <div className="backgroundTitle">background-color</div>{" "}
+            <img
+              className="color_pop"
+              src={downArrow}
+              alt={"down"}
+              onClick={() => handleOnClick("colorPop")}
+            />
+            <div style={styleColorPop}>
+              <ToggleColor />
+            </div>
+            <div className="composition">구성 컴포넌트</div>
+            <div className="tx">TEXT</div>{" "}
+            <div className="txComp">{txComponents} </div>
+            <div className="img">IMAGE</div>{" "}
+            <div className="imgComp">{imgComponents}</div>
+            <div className="vid">VIDEO</div>{" "}
+            <div className="vidComp">{vidComponents}</div>
+            <div className="regTitle">등록정보</div>
+            <div className="regDateTx">등록일</div>
+            <DatePicker
+              className="regDate"
+              dateFormat="yyyy/MM/dd"
+              selected={startDate}
+              onChange={date => setStartDate(date)}
+            />
+            <div className="regNameTx">등록자</div>
+            <input
+              className="propRegName"
+              value={regName}
+              onChange={handleOnChange}
+            />
+            <div className="mappingTitle">매핑정보</div>
+            <div className="field_tx">필드명</div>{" "}
+            <input
+              className="field_input"
+              value={mappingField}
+              onChange={handleOnChange}
+            />
+            <div className="labelName">설명</div>
+            <div className="labelContent">
+              <textarea
+                rows="6"
+                cols="35"
+                value={DESCRIPTION}
+                onChange={handleOnChange}
+              />
+            </div>
+          </div>
+          <div className="prop_button">
+            <button className="prop_reset" onClick={reset}>
+              초기화
+            </button>
+            <button className="prop_delete">삭제</button>
+            <button className="prop_save" onClick={save}>
+              저장
+            </button>
+          </div>
+        </Fragment>
+      )}
     </div>
   );
 };

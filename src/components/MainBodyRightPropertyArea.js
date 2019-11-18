@@ -10,18 +10,13 @@ import PropertyComponent from "./PropertyComponent.js";
 import TemplatePropDataContainer from "../containers/TemplatePropDataContainer";
 
 const MainBodyRightPropertyArea = ({ activeTabDatas, setActiveTab }) => {
-  const isActive = activeTabDatas.tabActive;
-  const activeIdx = activeTabDatas.tabIndex;
-
   const [tabIndex, setTabIndex] = useState(0);
 
-  const handleOnSelectTab = (idx, lastIdx, evt) => {
-    setTabIndex(idx);
-  };
-
   useEffect(() => {
+    const isActive = activeTabDatas.tabActive;
+
     if (isActive) {
-      setTabIndex(activeIdx);
+      setTabIndex(activeTabDatas.tabIndex);
 
       const activeTab = {
         tabActive: false,
@@ -29,7 +24,11 @@ const MainBodyRightPropertyArea = ({ activeTabDatas, setActiveTab }) => {
       };
       setActiveTab(activeTab);
     }
-  }, [isActive]);
+  }, [activeTabDatas.tabActive]);
+
+  const handleOnSelectTab = (idx, lastIdx, evt) => {
+    setTabIndex(idx);
+  };
 
   return (
     <Tabs selectedIndex={tabIndex} onSelect={handleOnSelectTab}>

@@ -1,0 +1,13 @@
+.labelName {
+  width: 40px;
+  margin-left: 0.4rem;
+  margin-top: 3rem;
+  margin-bottom: 0.4rem;
+  color: #556998;
+  font-weight: 550;
+  font-size: 15px;
+}
+
+.labelContent {
+  padding: 5px 15px;
+}

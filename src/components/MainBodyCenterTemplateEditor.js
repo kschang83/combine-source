@@ -9,7 +9,12 @@ import newTemplateIcon from "../img/positive-sign.png";
 import rightArrow from "../img/right-arrow.png";
 import leftArrow from "../img/left-arrow.png";
 
-const MainBodyCenterTemplateEditor = ({ editDatas, insert, setActiveTab }) => {
+const MainBodyCenterTemplateEditor = ({
+  editDatas,
+  insert,
+  setActiveTab,
+  setInit
+}) => {
   const [isOpenDlg, setIsOpenDlg] = useState(false);
   const [datas, setDatas] = useState({
     ID: "",
@@ -94,6 +99,7 @@ const MainBodyCenterTemplateEditor = ({ editDatas, insert, setActiveTab }) => {
 
   const handleMakeNewTemplate = e => {
     setIsOpenDlg(false);
+    setInit(false);
     insert(datas);
 
     const activeTab = {
