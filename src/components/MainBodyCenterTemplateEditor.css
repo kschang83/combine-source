@@ -71,18 +71,22 @@
   height: 27px;
 }
 
-.resize-drag {
+.draggable-item {
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  display: block;
   background-color: #fff;
-  color: black;
-  touch-action: none;
-  border: 2px solid black;
-
-  /* This makes things *much* easier */
-  box-sizing: border-box;
+  outline: 0;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  margin: 2px 5px;
 }
 
-.resize-container {
-  display: inline-block;
-  width: 100%;
-  height: 100%;
+.dropZone {
+  padding: 200px 40px 40px 40px;
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 50px;
+  text-align: center;
+  word-break: break-all;
 }

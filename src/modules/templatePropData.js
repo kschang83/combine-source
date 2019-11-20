@@ -48,29 +48,12 @@ const initialState = {
         },
         BACKGROUNDCOLOR: "",
         TEXTALIGN: ""
-      },
-      COMPONENT: {
-        TEXT: [
-          {
-            ID: "",
-            TITLE: "",
-            COUNT: 0
-          }
-        ],
-        IMAGE: [
-          {
-            ID: "",
-            TITLE: "",
-            COUNT: 0
-          }
-        ]
-      },
-      REGDATE: "",
-      REGNAME: "",
-      MAPPING: {
-        FIELD: ""
       }
-    }
+    },
+    COMPONENT: [],
+    REGDATE: "",
+    REGNAME: "",
+    MAPPINGFIELD: ""
   },
   activeTabDatas: {
     tabActive: false,
@@ -91,7 +74,11 @@ function templatePropData(state = initialState, action) {
           DESCRIPTION: action.templateDatas.DESCRIPTION,
           WIDTH: action.templateDatas.WIDTH,
           HEIGHT: action.templateDatas.HEIGHT,
-          ATTRIBUTE: action.templateDatas.ATTRIBUTE
+          ATTRIBUTE: action.templateDatas.ATTRIBUTE,
+          COMPONENT: action.templateDatas.COMPONENT,
+          REGDATE: action.templateDatas.REGDATE,
+          REGNAME: action.templateDatas.REGNAME,
+          MAPPINGFIELD: action.templateDatas.MAPPINGFIELD
         }
       };
     case ACTIVE_PROP_TAB:

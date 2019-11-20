@@ -1,9 +1,12 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
+import { Container, Draggable } from "react-smooth-dnd";
+
 import "./TemplateEditor.css";
 import "./TemplateEditorMain.css";
 
-class ListTemplate extends Component {
-  state = {
+const ListTemplate = () => {
+  // 추후 서버와의 통신(axios)으로 데이터가 오면, 이를 받아서 props로 처리하도록
+  const [templateDatas, setTemplageDatas] = useState({
     DATA: [
       {
         ID: "T1",
@@ -32,34 +35,37 @@ class ListTemplate extends Component {
             },
             BACKGROUNDCOLOR: "#FFFFFF",
             TEXTALIGN: ""
-          },
-          COMPONENT: {
-            TEXT: [
-              {
-                ID: "C1",
-                TITLE: "제목",
-                COUNT: 1
-              },
-              {
-                ID: "C8",
-                TITLE: "관련기사",
-                COUNT: 3
-              }
-            ],
-            IMAGE: [
-              {
-                ID: "C15",
-                TITLE: "일반",
-                COUNT: 1
-              }
-            ]
-          },
-          REGDATE: "20190110",
-          REGNAME: "조혜민",
-          MAPPING: {
-            FIELD: ""
           }
-        }
+        },
+        COMPONENT: [
+          {
+            ID: "TX1",
+            ORGID: "TX1",
+            TYPE: "TEXT",
+            CATEGORY: "제목",
+            TITLE: "제목영역",
+            SORTIDX: 0
+          },
+          {
+            ID: "TX2",
+            ORGID: "TX2",
+            TYPE: "TEXT",
+            CATEGORY: "부제목",
+            TITLE: "부제목을 넣어주세요",
+            SORTIDX: 1
+          },
+          {
+            ID: "TX5",
+            ORGID: "TX5",
+            TYPE: "TEXT",
+            CATEGORY: "본문",
+            TITLE: "본문을 입력하는 곳!!!",
+            SORTIDX: 2
+          }
+        ],
+        REGDATE: "20190110",
+        REGNAME: "조혜민",
+        MAPPINGFIELD: ""
       },
       {
         ID: "T2",
@@ -90,87 +96,65 @@ class ListTemplate extends Component {
             },
             BACKGROUNDCOLOR: "#FFFFFF",
             TEXTALIGN: ""
-          },
-          COMPONENT: {
-            TEXT: [
-              {
-                ID: "C1",
-                TITLE: "제목",
-                COUNT: 1
-              },
-              {
-                ID: "C8",
-                TITLE: "관련기사",
-                COUNT: 3
-              }
-            ],
-            IMAGE: [
-              {
-                ID: "C15",
-                TITLE: "일반",
-                COUNT: 1
-              }
-            ]
-          },
-          REGDATE: "20190110",
-          REGNAME: "조혜민",
-          MAPPING: {
-            FIELD: ""
           }
-        }
+        },
+        COMPONENT: [
+          {
+            ID: "TX7",
+            ORGID: "TX7",
+            TYPE: "TEXT",
+            CATEGORY: "날짜",
+            TITLE: "2019-11-19 12:15:00",
+            SORTIDX: 0
+          },
+          {
+            ID: "TX10",
+            ORGID: "TX10",
+            TYPE: "TEXT",
+            CATEGORY: "바이라인",
+            TITLE: "donga@donga.com",
+            SORTIDX: 1
+          },
+          {
+            ID: "I1",
+            ORGID: "I1",
+            TYPE: "IMAGE",
+            CATEGORY: "이미지일반",
+            TITLE: "이미지제목OR캡션",
+            SORTIDX: 2
+          }
+        ],
+        REGDATE: "20190110",
+        REGNAME: "조혜민",
+        MAPPINGFIELD: ""
       }
     ]
-  };
+  });
 
-  prop_template = (template, firstId, lastId) => {
-    const temp = document.getElementById(template.ID);
-    const tempId = template.ID.substring(1, template.ID.length);
+  const { DATA } = templateDatas;
 
-    const first = parseInt(firstId);
-    const last = parseInt(lastId);
+  const templateList = (
+    <Container
+      groupName="dragndropArea"
+      behaviour="copy"
+      getChildPayload={i => DATA[i]}
+    >
+      {DATA.map(template => (
+        <Draggable key={template.ID}>
+          <div className="temp">
+            {template.TITLE} ({template.ID})
+          </div>
+        </Draggable>
+      ))}
+    </Container>
+  );
 
-    for (var i = first; i <= last; i++) {
-      if (i === parseInt(tempId)) {
-        temp.style.backgroundColor = "#e0eaec";
-        temp.style.fontWeight = "550";
-        temp.style.bordercolor = "#909090";
-        temp.style.color = "#20323a";
-      } else {
-        const oth_temp = document.getElementById("T" + i);
-        oth_temp.style.backgroundColor = "white";
-        oth_temp.style.fontWeight = "100";
-        oth_temp.style.bordercolor = "#bbb8b8";
-        oth_temp.style.color = "#bbb8b8";
-      }
-    }
-  };
-
-  render() {
-    const templateData = this.state.DATA;
-    const Id = templateData[0].ID;
-    const firstId = Id.substring(1, Id.length);
-
-    const Id2 = templateData[templateData.length - 1].ID;
-    const lastId = Id2.substring(1, Id2.length);
-
-    const templateList = templateData.map(template => (
-      <button
-        className="temp"
-        key={template.ID}
-        id={template.ID}
-        onClick={() => this.prop_template(template, firstId, lastId)}
-      >
-        {template.TITLE} ({template.ID})
-      </button>
-    ));
-
-    return (
-      <div className="templateList">
-        <input className="compoSearch" placeholder="Search Here" />
-        {templateList}
-      </div>
-    );
-  }
-}
+  return (
+    <div className="templateList">
+      <input className="compoSearch" placeholder="Search Here" />
+      {templateList}
+    </div>
+  );
+};
 
 export default ListTemplate;

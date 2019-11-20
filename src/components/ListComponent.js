@@ -15,8 +15,10 @@ const ListComponent = ({
   const [componentDatas, setComponentDatas] = useState({
     TEXT: [
       {
+        TYPE: "TEXT",
         CATEGORY: "제목",
         ID: "TX1",
+        ORGID: "TX1",
         TITLE: "제목",
         ATTRIBUTE: {
           BOX: {
@@ -65,8 +67,10 @@ const ListComponent = ({
         }
       },
       {
+        TYPE: "TEXT",
         CATEGORY: "부제목",
         ID: "TX2",
+        ORGID: "TX2",
         TITLE: "부제목",
         ATTRIBUTE: {
           BOX: {
@@ -114,8 +118,10 @@ const ListComponent = ({
         }
       },
       {
+        TYPE: "TEXT",
         CATEGORY: "소제목",
         ID: "TX3",
+        ORGID: "TX3",
         TITLE: "소제목",
         ATTRIBUTE: {
           BOX: {
@@ -163,8 +169,10 @@ const ListComponent = ({
         }
       },
       {
+        TYPE: "TEXT",
         CATEGORY: "표제",
         ID: "TX4",
+        ORGID: "TX4",
         TITLE: "표제",
         ATTRIBUTE: {
           BOX: {
@@ -212,8 +220,10 @@ const ListComponent = ({
         }
       },
       {
+        TYPE: "TEXT",
         CATEGORY: "본문",
         ID: "TX5",
+        ORGID: "TX5",
         TITLE: "본문",
         ATTRIBUTE: {
           BOX: {
@@ -261,8 +271,10 @@ const ListComponent = ({
         }
       },
       {
+        TYPE: "TEXT",
         CATEGORY: "발문",
         ID: "TX6",
+        ORGID: "TX6",
         TITLE: "발문",
         ATTRIBUTE: {
           BOX: {
@@ -311,8 +323,10 @@ const ListComponent = ({
         }
       },
       {
+        TYPE: "TEXT",
         CATEGORY: "날짜",
         ID: "TX7",
+        ORGID: "TX7",
         TITLE: "날짜",
         ATTRIBUTE: {
           BOX: {
@@ -361,8 +375,10 @@ const ListComponent = ({
         }
       },
       {
+        TYPE: "TEXT",
         CATEGORY: "관련기사",
         ID: "TX8",
+        ORGID: "TX8",
         TITLE: "관련기사",
         ATTRIBUTE: {
           BOX: {
@@ -411,8 +427,10 @@ const ListComponent = ({
         }
       },
       {
+        TYPE: "TEXT",
         CATEGORY: "주요기사",
         ID: "TX9",
+        ORGID: "TX9",
         TITLE: "주요기사",
         ATTRIBUTE: {
           BOX: {
@@ -460,8 +478,10 @@ const ListComponent = ({
         }
       },
       {
+        TYPE: "TEXT",
         CATEGORY: "바이라인",
         ID: "TX10",
+        ORGID: "TX10",
         TITLE: "바이라인",
         ATTRIBUTE: {
           BOX: {
@@ -509,8 +529,10 @@ const ListComponent = ({
         }
       },
       {
+        TYPE: "TEXT",
         CATEGORY: "출처",
         ID: "TX11",
+        ORGID: "TX11",
         TITLE: "출처",
         ATTRIBUTE: {
           BOX: {
@@ -559,8 +581,10 @@ const ListComponent = ({
         }
       },
       {
+        TYPE: "TEXT",
         CATEGORY: "분류",
         ID: "TX12",
+        ORGID: "TX12",
         TITLE: "분류",
         ATTRIBUTE: {
           BOX: {
@@ -608,8 +632,10 @@ const ListComponent = ({
         }
       },
       {
+        TYPE: "TEXT",
         CATEGORY: "라벨",
         ID: "TX13",
+        ORGID: "TX13",
         TITLE: "라벨",
         ATTRIBUTE: {
           BOX: {
@@ -659,8 +685,10 @@ const ListComponent = ({
     ],
     IMAGE: [
       {
+        TYPE: "IMAGE",
         CATEGORY: "이미지일반",
         ID: "I1",
+        ORGID: "I1",
         TITLE: "이미지일반",
         ATTRIBUTE: {
           BOX: {
@@ -723,8 +751,10 @@ const ListComponent = ({
         }
       },
       {
+        TYPE: "IMAGE",
         CATEGORY: "이미지일반",
         ID: "I2",
+        ORGID: "I2",
         TITLE: "이미지일반2",
         ATTRIBUTE: {
           BOX: {
@@ -789,8 +819,10 @@ const ListComponent = ({
     ],
     VIDEO: [
       {
+        TYPE: "VIDEO",
         CATEGORY: "동영상일반",
         ID: "V1",
+        ORGID: "V1",
         TITLE: "동영상일반",
         ATTRIBUTE: {
           BOX: {
@@ -854,8 +886,10 @@ const ListComponent = ({
         }
       },
       {
+        TYPE: "VIDEO",
         CATEGORY: "동영상일반",
         ID: "V2",
+        ORGID: "V2",
         TITLE: "동영상일반2",
         ATTRIBUTE: {
           BOX: {
@@ -1026,9 +1060,6 @@ const ListComponent = ({
   }, [selectedEditDatas.ID, selectedEditDatas.ACTION]);
 
   const callbackEditData = (editingTarget, editingType, editingDatas) => {
-    console.log("callback - 리스트 컴포넌트");
-    console.log(" = editingType", editingType);
-    console.log(" = editingDatas", editingDatas);
     callbackPropsEditData(editingTarget, editingType, editingDatas);
   };
 

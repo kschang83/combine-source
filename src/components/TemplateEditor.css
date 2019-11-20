@@ -63,6 +63,8 @@
   border: 2px solid #bbb8b8;
   color: #bbb8b8;
   font-size: 15px;
+  text-align: center;
+  line-height: 38px;
 }
 .temp {
   width: 230px;
@@ -73,6 +75,8 @@
   border: 2px solid #bbb8b8;
   color: #bbb8b8;
   font-size: 15px;
+  text-align: center;
+  line-height: 38px;
 }
 .compo:hover,
 .pop_compo:hover {

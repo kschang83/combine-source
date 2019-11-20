@@ -40,29 +40,12 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
         },
         BACKGROUNDCOLOR: "",
         TEXTALIGN: ""
-      },
-      COMPONENT: {
-        TEXT: [
-          {
-            ID: "",
-            TITLE: "",
-            COUNT: 0
-          }
-        ],
-        IMAGE: [
-          {
-            ID: "",
-            TITLE: "",
-            COUNT: 0
-          }
-        ]
-      },
-      REGDATE: "",
-      REGNAME: "",
-      MAPPING: {
-        FIELD: ""
       }
-    }
+    },
+    COMPONENT: [],
+    REGDATE: "",
+    REGNAME: "",
+    MAPPINGFIELD: ""
   });
 
   const [startDate, setStartDate] = useState(new Date()); // 추후 데이터 활용 (REGDATE)
@@ -74,7 +57,18 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
     colorPop: false
   });
 
-  const { ID, TITLE, DESCRIPTION, WIDTH, HEIGHT, ATTRIBUTE } = datas;
+  const {
+    ID,
+    TITLE,
+    DESCRIPTION,
+    WIDTH,
+    HEIGHT,
+    ATTRIBUTE,
+    COMPONENT,
+    REGDATE,
+    REGNAME,
+    MAPPINGFIELD
+  } = datas;
   const { borderPop, paddingPop, marginPop, colorPop } = showPop;
 
   useEffect(() => {
@@ -84,10 +78,14 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
       DESCRIPTION: editDatas.DESCRIPTION,
       WIDTH: editDatas.WIDTH,
       HEIGHT: editDatas.HEIGHT,
-      ATTRIBUTE: editDatas.ATTRIBUTE
+      ATTRIBUTE: editDatas.ATTRIBUTE,
+      COMPONENT: editDatas.COMPONENT,
+      REGDATE: editDatas.REGDATE,
+      REGNAME: editDatas.REGNAME,
+      MAPPINGFIELD: editDatas.MAPPINGFIELD
     };
     setDatas(propEditDatas);
-  }, [editDatas.TITLE, editDatas.WIDTH, editDatas.HEIGHT]);
+  }, [editDatas]);
 
   const handleOnChange = e => {
     setDatas({
@@ -132,47 +130,29 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
   const styleMarginPop = marginPop ? {} : { display: "none" };
   const styleColorPop = colorPop ? {} : { display: "none" };
 
-  //구성 컴포넌트 정리 (추후 데이터 활용 ATTRIBUTE-COMPONENT-TEXT/IMAGE/VIDEO)
-  let txComponents = "";
-  let imgComponents = "";
-  let vidComponents = "";
-  /*
-  if (attr.COMPONENT.TEXT !== undefined) {
-    txComponents = (attr.COMPONENT.TEXT).map(
-      (txComponent) => (<ul className="ulTx">{txComponent.TITLE} ({txComponent.ID}) {txComponent.COUNT} </ul>));
-  }
+  const textComponents = COMPONENT.map(component =>
+    component.TYPE === "TEXT" ? (
+      <li key={component.ID}>
+        {component.TITLE} ({component.CATEGORY}) {component.SORTIDX}{" "}
+      </li>
+    ) : null
+  );
 
-  if (attr.COMPONENT.IMAGE !== undefined) {
-    imgComponents = (attr.COMPONENT.IMAGE).map(
-      (imgComponent) => (<ul className="ulTx">{imgComponent.TITLE} ({imgComponent.ID}) {imgComponent.COUNT} </ul>));
-  }
+  const imageComponents = COMPONENT.map(component =>
+    component.TYPE === "IMAGE" ? (
+      <li key={component.ID}>
+        {component.TITLE} ({component.CATEGORY}) {component.SORTIDX}{" "}
+      </li>
+    ) : null
+  );
 
-  if (attr.COMPONENT.VIDEO !== undefined) {
-    vidComponents = (attr.COMPONENT.VIDEO).map(
-      (vidComponent) => (<ul className="ulTx">{vidComponent.TITLE} ({vidComponent.ID}) {vidComponent.COUNT} </ul>));
-  }
-  */
-
-  //기타 (추후 데이터 활용)
-  const boxBorder = {
-    BORDERWIDTH: 0,
-    BORDERSTYLE: "",
-    BORDERCOLOR: ""
-  };
-  const boxPadding = {
-    PADDINGTOP: 0,
-    PADDINGRIGHT: 0,
-    PADDINGBOTTOM: 0,
-    PADDINGLEFT: 0
-  };
-  const boxMargin = {
-    MARGINTOP: 0,
-    MARGINRIGHT: 30,
-    MARGINBOTTOM: 0,
-    MARGINLEFT: 0
-  };
-  const regName = "";
-  const mappingField = "";
+  const videoComponents = COMPONENT.map(component =>
+    component.TYPE === "VIDEO" ? (
+      <li key={component.ID}>
+        {component.TITLE} ({component.CATEGORY}) {component.SORTIDX}{" "}
+      </li>
+    ) : null
+  );
 
   //초기화
   const reset = () => {
@@ -182,7 +162,11 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
       DESCRIPTION: editDatas.DESCRIPTION,
       WIDTH: editDatas.WIDTH,
       HEIGHT: editDatas.HEIGHT,
-      ATTRIBUTE: editDatas.ATTRIBUTE
+      ATTRIBUTE: editDatas.ATTRIBUTE,
+      COMPONENT: editDatas.COMPONENT,
+      REGDATE: editDatas.REGDATE,
+      REGNAME: editDatas.REGNAME,
+      MAPPINGFIELD: editDatas.MAPPINGFIELD
     };
     setDatas(propEditDatas);
 
@@ -216,7 +200,7 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
             />
             <div className="propTitle">{ID}</div>
             <div className="boxTitle">Box</div>
-            <div className="prop_width_tx">width</div>{" "}
+            <div className="prop_width_tx">width</div>
             <input
               type="number"
               className="prop_width"
@@ -225,7 +209,7 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
               onChange={handleOnChange}
             />
             <div className="prop_width_px">px</div>
-            <div className="prop_height_tx">height</div>{" "}
+            <div className="prop_height_tx">height</div>
             <input
               type="number"
               className="prop_height"
@@ -234,7 +218,7 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
               onChange={handleOnChange}
             />
             <div className="prop_height_px">px</div>
-            <div className="borderTitle">border</div>{" "}
+            <div className="borderTitle">border</div>
             <img
               className="border_pop"
               src={downArrow}
@@ -243,12 +227,12 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
             />
             <div style={styleBorderPop}>
               <ToggleBorder
-                borderInfo={boxBorder}
+                borderInfo={ATTRIBUTE.BOX.BORDER}
                 title={TITLE}
                 isReset={isReset}
               />
             </div>
-            <div className="paddingTitle">padding</div>{" "}
+            <div className="paddingTitle">padding</div>
             <img
               className="padding_pop"
               src={downArrow}
@@ -257,12 +241,12 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
             />
             <div style={stylePaddingPop}>
               <TogglePadding
-                paddingInfo={boxPadding}
+                paddingInfo={ATTRIBUTE.BOX.PADDING}
                 title={TITLE}
                 isReset={isReset}
               />
             </div>
-            <div className="marginTitle">margin</div>{" "}
+            <div className="marginTitle">margin</div>
             <img
               className="margin_pop"
               src={downArrow}
@@ -271,12 +255,12 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
             />
             <div style={styleMarginPop}>
               <ToggleMargin
-                marginInfo={boxMargin}
+                marginInfo={ATTRIBUTE.BOX.MARGIN}
                 title={TITLE}
                 isReset={isReset}
               />
             </div>
-            <div className="backgroundTitle">background-color</div>{" "}
+            <div className="backgroundTitle">background-color</div>
             <img
               className="color_pop"
               src={downArrow}
@@ -287,31 +271,42 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
               <ToggleColor />
             </div>
             <div className="composition">구성 컴포넌트</div>
-            <div className="tx">TEXT</div>{" "}
-            <div className="txComp">{txComponents} </div>
-            <div className="img">IMAGE</div>{" "}
-            <div className="imgComp">{imgComponents}</div>
-            <div className="vid">VIDEO</div>{" "}
-            <div className="vidComp">{vidComponents}</div>
+            <div className="tx">TEXT</div>
+            <div className="txComp">
+              <ul className="ulTx">{textComponents}</ul>
+            </div>
+            <div className="img">IMAGE</div>
+            <div className="imgComp">
+              <ul className="ulTx">{imageComponents}</ul>
+            </div>
+            <div className="vid">VIDEO</div>
+            <div className="vidComp">
+              <ul className="ulTx">{videoComponents}</ul>
+            </div>
             <div className="regTitle">등록정보</div>
             <div className="regDateTx">등록일</div>
-            <DatePicker
+            <input
+              type="text"
               className="regDate"
-              dateFormat="yyyy/MM/dd"
-              selected={startDate}
-              onChange={date => setStartDate(date)}
+              name="REGDATE"
+              value={REGDATE}
+              onChange={handleOnChange}
             />
             <div className="regNameTx">등록자</div>
             <input
+              type="text"
               className="propRegName"
-              value={regName}
+              name="REGNAME"
+              value={REGNAME}
               onChange={handleOnChange}
             />
             <div className="mappingTitle">매핑정보</div>
-            <div className="field_tx">필드명</div>{" "}
+            <div className="field_tx">필드명</div>
             <input
+              type="text"
               className="field_input"
-              value={mappingField}
+              name="MAPPINGFIELD"
+              value={MAPPINGFIELD}
               onChange={handleOnChange}
             />
             <div className="labelName">설명</div>

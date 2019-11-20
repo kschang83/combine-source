@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 import { confirmAlert } from "react-confirm-alert";
+import { Container, Draggable } from "react-smooth-dnd";
+
 import "react-confirm-alert/src/react-confirm-alert.css";
 import "./TemplateEditor.css";
 import "./ListComponentText.css";
@@ -58,6 +60,7 @@ const ListComponentText = ({
     console.log("리스트 클릭했을 경우 css 변경 처리"); // 추후....
   };
 
+  /*
   const list = textData.map(component => (
     <ContextMenuTrigger
       id="listComponentContextMenu"
@@ -99,6 +102,7 @@ const ListComponentText = ({
       </button>
     </ContextMenuTrigger>
   ));
+        */
 
   const handleOpenComponentEdiotr = (e, d, target) => {
     e.preventDefault();
@@ -157,12 +161,6 @@ const ListComponentText = ({
   };
 
   const onActionConfirm = (action, lookupData) => {
-    console.log("확인을 누를때...");
-    console.log(" - action ", action);
-    console.log(" - lookupData[0] ", lookupData[0]);
-    console.log(" - selectedEditDatas.ID ", selectedEditDatas.ID);
-    console.log(" - selectedEditDatas.ACTION ", selectedEditDatas.ACTION);
-
     let check = true;
     if (selectedEditDatas.ID === lookupData[0].ID) {
       if (selectedEditDatas.ACTION === action) {
@@ -186,26 +184,16 @@ const ListComponentText = ({
         editDialogOpenType: action
       });
 
-      console.log("callback 호출 - 리스트 컴포넌트 텍스트");
-      console.log(" = editingeditDialogOpenTypeType", action);
-      console.log(" = choiceData", lookupData[0]);
-
       callbackEditData(newDialogOpenType, action, lookupData[0]);
     }
   };
 
   const callbackSetFlag = flag => {
-    console.log("ListComponentText 콜백");
     setEditDialogDatas({
       ...editDialogDatas,
       isOpenEditor: flag
     });
   };
-
-  console.log("ListComponetText");
-  console.log(" - datas ", datas);
-  console.log(" - editDialogDatas ", editDialogDatas);
-  console.log(" - selectedEditDatas ", selectedEditDatas);
 
   return (
     <div className="compoSection">
@@ -215,7 +203,58 @@ const ListComponentText = ({
         {isPopupUse ? null : (
           <OpenDialogNewComponent openType={newDialogOpenType} />
         )}
-        {isPopupUse ? listPopup : list}
+        {isPopupUse ? (
+          textData.map(component => (
+            <ContextMenuTrigger
+              id="listComponentContextMenuPopUp"
+              key={"menu_popup_" + component.ID}
+              collect={() =>
+                setDatas({
+                  ...datas,
+                  choiceId: component.ID
+                })
+              }
+            >
+              <button
+                className={
+                  isPopupUse && nowSelectedId === component.ID
+                    ? "pop_compo selectedItem"
+                    : "pop_compo"
+                }
+                key={"popup_" + component.ID}
+                onClick={clickListItem}
+              >
+                {component.TITLE} ({component.ID})
+              </button>
+            </ContextMenuTrigger>
+          ))
+        ) : (
+          <Container
+            groupName="dragndropArea"
+            behaviour="copy"
+            getChildPayload={i => textData[i]}
+          >
+            {textData.map(component => (
+              <Draggable key={component.ID}>
+                <ContextMenuTrigger
+                  id="listComponentContextMenu"
+                  key={"menu_" + component.ID}
+                  collect={() =>
+                    setDatas({
+                      ...datas,
+                      choiceId: component.ID
+                    })
+                  }
+                >
+                  <div className="compo">
+                    {component.TITLE} ({component.ID})
+                  </div>
+                </ContextMenuTrigger>
+              </Draggable>
+            ))}
+          </Container>
+        )}
+
         {isPopupUse ? (
           <ContextMenu id="listComponentContextMenuPopUp">
             <MenuItem
