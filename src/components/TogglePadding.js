@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import "./TemplateEditor.css";
+import "./Toggle.css";
 
 //component 속성 - padding
 const TogglePadding = padding => {
@@ -52,37 +53,51 @@ const TogglePadding = padding => {
   }, [padding.title]);
 
   return (
-    <div className="pop_padding">
-      <div className="pop_padding_top">padding-top</div>
-      <input
-        type="number"
-        className="pop_padding_top_input"
-        name="pop_padding_top_input"
-        value={pop_padding_top_input}
-        onChange={handleVal}
-      />
-      <div className="pop_padding_top_px">px</div>
-      <div className="pop_padding_right">padding-right</div>
-      <input
-        className="pop_padding_right_input"
-        value={pop_padding_right_input}
-        onChange={handleVal}
-      />
-      <div className="pop_padding_right_px">px</div>
-      <div className="pop_padding_bottom">padding-bottom</div>
-      <input
-        className="pop_padding_bottom_input"
-        value={pop_padding_bottom_input}
-        onChange={handleVal}
-      />
-      <div className="pop_padding_bottom_px">px</div>
-      <div className="pop_padding_left">padding-left</div>
-      <input
-        className="pop_padding_left_input"
-        value={pop_padding_left_input}
-        onChange={handleVal}
-      />
-      <div className="pop_padding_left_px">px</div>
+    <div className="toggleBox paddingArea">
+      <div className="toggleContent">
+        <span className="title">padding-top</span>
+        <input
+          type="number"
+          className="togglePaddingTop"
+          name="pop_padding_top_input"
+          value={pop_padding_top_input}
+          onChange={handleVal}
+        />
+        <span className="title">px</span>
+      </div>
+      <div className="toggleContent">
+        <span className="title">padding-right</span>
+        <input
+          type="number"
+          className="togglePaddingTop"
+          name="pop_padding_right_input"
+          value={pop_padding_right_input}
+          onChange={handleVal}
+        />
+        <span className="title">px</span>
+      </div>
+      <div className="toggleContent">
+        <span className="title">padding-bottom</span>
+        <input
+          type="number"
+          className="togglePaddingTop"
+          name="pop_padding_bottom_input"
+          value={pop_padding_bottom_input}
+          onChange={handleVal}
+        />
+        <span className="title">px</span>
+      </div>
+      <div className="toggleContent">
+        <span className="title">padding-left</span>
+        <input
+          type="number"
+          className="togglePaddingTop"
+          name="pop_padding_left_input"
+          value={pop_padding_left_input}
+          onChange={handleVal}
+        />
+        <span className="title">px</span>
+      </div>
     </div>
   );
 };

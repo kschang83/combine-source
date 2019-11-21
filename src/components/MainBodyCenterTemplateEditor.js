@@ -7,8 +7,6 @@ import "./TemplateEditorMain.css";
 import "./MainBodyCenterTemplateEditor.css";
 
 import newTemplateIcon from "../img/positive-sign.png";
-import rightArrow from "../img/right-arrow.png";
-import leftArrow from "../img/left-arrow.png";
 
 const MainBodyCenterTemplateEditor = ({
   editDatas,
@@ -19,8 +17,13 @@ const MainBodyCenterTemplateEditor = ({
   const [isOpenDlg, setIsOpenDlg] = useState(false);
   const [editFlag, setEditFlag] = useState({
     isTemplate: true,
-    isBeginning: true,
+    isEmpty: true,
     isNew: true
+  });
+  const [inputDatas, setInputDatas] = useState({
+    inputTitle: "",
+    inputWidth: 0,
+    inputHeight: 0
   });
   const [datas, setDatas] = useState({
     ID: "",
@@ -43,7 +46,7 @@ const MainBodyCenterTemplateEditor = ({
         },
         MARGIN: {
           MARGINTOP: 0,
-          MARGINRIGHT: 30,
+          MARGINRIGHT: 0,
           MARGINBOTTOM: 0,
           MARGINLEFT: 0
         },
@@ -59,11 +62,12 @@ const MainBodyCenterTemplateEditor = ({
   const [areaSize, setAreaSize] = useState({
     boxWidth: 0,
     boxHeight: 0,
-    boxLeft: 0,
+    boxLeft: 300,
     boxTop: 0
   });
   const editorMainArea = useRef(null);
 
+  const { inputTitle, inputWidth, inputHeight } = inputDatas;
   const {
     ID,
     TITLE,
@@ -76,11 +80,11 @@ const MainBodyCenterTemplateEditor = ({
     REGNAME,
     MAPPINGFIELD
   } = datas;
-  const { isBeginning, isNew } = editFlag;
+  const { isTemplate, isEmpty, isNew } = editFlag;
   const { boxWidth, boxHeight, boxLeft, boxTop } = areaSize;
 
   useEffect(() => {
-    const propEditDatas = {
+    setDatas({
       ID: editDatas.ID,
       TITLE: editDatas.TITLE,
       DESCRIPTION: editDatas.DESCRIPTION,
@@ -91,17 +95,17 @@ const MainBodyCenterTemplateEditor = ({
       REGDATE: editDatas.REGDATE,
       REGNAME: editDatas.REGNAME,
       MAPPINGFIELD: editDatas.MAPPINGFIELD
-    };
-    setDatas(propEditDatas);
+    });
 
     if (WIDTH !== editDatas.WIDTH || HEIGHT !== editDatas.HEIGHT) {
-      adjustBox();
+      adjustBox(editDatas.WIDTH, editDatas.HEIGHT);
     }
-  }, [editDatas.TITLE, editDatas.WIDTH, editDatas.HEIGHT]);
+  }, [editDatas]);
 
-  const adjustBox = () => {
+  // 에디팅 div 영역 가운데 정렬
+  const adjustBox = (w, h) => {
     const cWidth = editorMainArea.current.clientWidth;
-    const left = cWidth > WIDTH ? (cWidth - WIDTH) / 2 : 0;
+    const left = cWidth > w ? (cWidth - w) / 2 : 0;
 
     setAreaSize({
       boxWidth: editorMainArea.current.clientWidth,
@@ -111,52 +115,111 @@ const MainBodyCenterTemplateEditor = ({
     });
   };
 
+  // 신규 템플릿 생성 다이얼로그 내 input 영역 Enter key 처리
+  const handleOnKeyDown = e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      e.stopPropagation();
+      handleMakeNewTemplate(e);
+    }
+  };
+
+  // 신규 템플릿 생성 다이얼로드 열기
   const handleOpenDialog = e => {
     setIsOpenDlg(true);
   };
 
+  // 신규 템플릿 생성 다이얼로드 닫기
   const handleCloseDialog = e => {
+    setInputDatas({
+      inputTitle: "",
+      inputWidth: 0,
+      inputHeight: 0
+    });
     setIsOpenDlg(false);
   };
 
+  // 신규 템플릿 생성 다이얼로그 내 input 영역 state 업데이트
   const handleOnChange = e => {
-    setDatas({
-      ...datas,
+    setInputDatas({
+      ...inputDatas,
       [e.target.name]: e.target.value
     });
   };
 
+  // 신규 템플릿 생성
   const handleMakeNewTemplate = e => {
+    if (inputTitle.length === 0) {
+      alert("템플릿 이름을 입력하세요.");
+      return false;
+    }
+
+    if (inputWidth <= 0) {
+      alert("템플릿 width를 정수로 입력하세요.");
+      return false;
+    }
+    if (inputWidth < 300) {
+      alert("템플릿 width 최소는 300px 입니다. 300px보다 크게 지정해주세요.");
+      return false;
+    }
+
+    if (inputHeight <= 0) {
+      alert("템플릿 height를 정수로 입력하세요.");
+      return false;
+    }
+    if (inputHeight < 300) {
+      alert("템플릿 height 최소는 300px 입니다. 300px보다 크게 지정해주세요.");
+      return false;
+    }
+
+    // 신규 템플릿 생성 다이얼로그 닫기 (state)
     setIsOpenDlg(false);
+
+    // 각종 flag 처리
     setEditFlag({
-      isBeginning: false,
+      isTemplate: true,
+      isEmpty: false,
       isNew: true
     });
 
+    // 우측 템플릿 속성영역 사용여부 (false로 셋팅해야 보임)
     setInit(false);
+
+    // 우측 속성탭 활성화 여부
     setActiveTab({
       tabActive: true,
       tabIndex: 0 // 0:템플릿속성Tab 1:컴포넌트속성Tab
     });
 
-    insert({
+    const newDatas = {
       ...datas,
-      TITLE: TITLE,
-      WIDTH: WIDTH,
-      HEIGHT: HEIGHT
+      TITLE: inputTitle,
+      WIDTH: inputWidth,
+      HEIGHT: inputHeight
+    };
+
+    setDatas(newDatas); // state 반영
+    insert(newDatas); // redux store 반영
+
+    // 신규 생성 다이얼로그 input 값 초기화
+    setInputDatas({
+      inputTitle: "",
+      inputWidth: 0,
+      inputHeight: 0
     });
 
-    adjustBox();
+    adjustBox(inputWidth, inputHeight);
   };
 
+  // 에디팅 영역 드롭되었을 때의 처리
   const applyDragInEditor = (arr, dragResult) => {
     const { removedIndex, addedIndex, payload } = dragResult;
     if (removedIndex === null && addedIndex === null) return arr;
 
-    console.log("arr", arr); // 현재 STATE
-    console.log("removedIndex", removedIndex); // 위아래 위치 이동시 사용
-    console.log("addedIndex", addedIndex); // 추가할때마다 + 위아래 위치 이동시
-    console.log("payload", payload); // DROP된 데이터
+    console.log("arr", arr);
+    console.log("removedIndex", removedIndex);
+    console.log("addedIndex", addedIndex);
+    console.log("payload", payload);
 
     const result = [...arr];
     let itemToAdd = {
@@ -195,13 +258,82 @@ const MainBodyCenterTemplateEditor = ({
     insert(newDatas);
   };
 
+  // 배치된 컴포넌트 더블클릭 시, 우측 컴포넌트 속성 영역 활성화 및 데이터 노출
   const onDblClick = e => {
     console.log(e);
   };
 
+  // 템플릿 저장
+  const save = () => {
+    alert("저장완료!!");
+
+    const resetDatas = {
+      ID: "",
+      TITLE: "",
+      DESCRIPTION: "",
+      WIDTH: 0,
+      HEIGHT: 0,
+      ATTRIBUTE: {
+        BOX: {
+          BORDER: {
+            BORDERWIDTH: 0,
+            BORDERSTYLE: "",
+            BORDERCOLOR: ""
+          },
+          PADDING: {
+            PADDINGTOP: 0,
+            PADDINGRIGHT: 0,
+            PADDINGBOTTOM: 0,
+            PADDINGLEFT: 0
+          },
+          MARGIN: {
+            MARGINTOP: 0,
+            MARGINRIGHT: 0,
+            MARGINBOTTOM: 0,
+            MARGINLEFT: 0
+          },
+          BACKGROUNDCOLOR: "",
+          TEXTALIGN: ""
+        }
+      },
+      COMPONENT: [],
+      REGDATE: "",
+      REGNAME: "",
+      MAPPINGFIELD: ""
+    };
+
+    // 각종 flag 초기화
+    setEditFlag({
+      isTemplate: true,
+      isEmpty: true,
+      isNew: true
+    });
+
+    // 우측 템플릿 속성영역 초기화
+    setInit(true);
+
+    setDatas(resetDatas); // state 초기화
+    insert(resetDatas); // redux store 값 초기화 반영
+
+    // 에디팅영역 box 사이즈 초기화
+    setAreaSize({
+      boxWidth: 0,
+      boxHeight: 0,
+      boxLeft: 300,
+      boxTop: 0
+    });
+
+    // 신규 생성 다이얼로그 input 값 초기화
+    setInputDatas({
+      inputTitle: "",
+      inputWidth: 0,
+      inputHeight: 0
+    });
+  };
+
   const templateEditBoxStyle = {
     position: "absolute",
-    left: boxLeft === 0 ? "300px" : boxLeft,
+    left: boxLeft + "px",
     border: "4px dashed #bcbcbc",
     width: WIDTH === 0 ? "500px" : WIDTH + "px",
     height: HEIGHT === 0 ? "600px" : HEIGHT + "px"
@@ -234,26 +366,29 @@ const MainBodyCenterTemplateEditor = ({
                 type="text"
                 className="templateName"
                 placeholder="템플릿 이름"
-                name="TITLE"
-                value={TITLE}
+                name="inputTitle"
+                value={inputTitle}
                 onChange={handleOnChange}
+                onKeyDown={handleOnKeyDown}
               />
               <div className="template_width_tx">width</div>{" "}
               <input
                 type="number"
                 className="template_width"
-                name="WIDTH"
-                value={WIDTH}
+                name="inputWidth"
+                value={inputWidth}
                 onChange={handleOnChange}
+                onKeyDown={handleOnKeyDown}
               />
               <div className="width_px">px</div>
               <div className="template_height_tx">height</div>{" "}
               <input
                 type="number"
                 className="template_height"
-                name="HEIGHT"
-                value={HEIGHT}
+                name="inputHeight"
+                value={inputHeight}
                 onChange={handleOnChange}
+                onKeyDown={handleOnKeyDown}
               />
               <div className="height_px">px</div>
               <button
@@ -281,7 +416,7 @@ const MainBodyCenterTemplateEditor = ({
       </div>
       <div className="editorMain" ref={editorMainArea}>
         <div style={templateEditBoxStyle}>
-          {isBeginning ? (
+          {isEmpty ? (
             <div className="dropZone">
               편집 작업을 진행할 템플릿을 좌측 목록에서 Drag하여 Drop하세요.
             </div>
@@ -309,10 +444,14 @@ const MainBodyCenterTemplateEditor = ({
         </div>
       </div>
       <div className="editorFooter">
-        <div className="actionBtn">
-          <button className="reset">초기화</button>
-          <button className="save">저장</button>
-        </div>
+        {isEmpty ? null : (
+          <div className="actionBtn">
+            <button className="reset">초기화</button>
+            <button className="save" onClick={save}>
+              저장
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

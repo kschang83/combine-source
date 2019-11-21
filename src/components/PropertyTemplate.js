@@ -191,132 +191,155 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
       {initialStatus ? null : (
         <Fragment>
           <div className="property_section">
-            <input
-              type="text"
-              className="propName"
-              name="TITLE"
-              value={TITLE}
-              onChange={handleOnChange}
-            />
-            <div className="propTitle">{ID}</div>
-            <div className="boxTitle">Box</div>
-            <div className="prop_width_tx">width</div>
-            <input
-              type="number"
-              className="prop_width"
-              name="WIDTH"
-              value={WIDTH}
-              onChange={handleOnChange}
-            />
-            <div className="prop_width_px">px</div>
-            <div className="prop_height_tx">height</div>
-            <input
-              type="number"
-              className="prop_height"
-              name="HEIGHT"
-              value={HEIGHT}
-              onChange={handleOnChange}
-            />
-            <div className="prop_height_px">px</div>
-            <div className="borderTitle">border</div>
-            <img
-              className="border_pop"
-              src={downArrow}
-              alt={"down"}
-              onClick={() => handleOnClick("borderPop")}
-            />
-            <div style={styleBorderPop}>
-              <ToggleBorder
-                borderInfo={ATTRIBUTE.BOX.BORDER}
-                title={TITLE}
-                isReset={isReset}
-              />
-            </div>
-            <div className="paddingTitle">padding</div>
-            <img
-              className="padding_pop"
-              src={downArrow}
-              alt={"down"}
-              onClick={() => handleOnClick("paddingPop")}
-            />
-            <div style={stylePaddingPop}>
-              <TogglePadding
-                paddingInfo={ATTRIBUTE.BOX.PADDING}
-                title={TITLE}
-                isReset={isReset}
-              />
-            </div>
-            <div className="marginTitle">margin</div>
-            <img
-              className="margin_pop"
-              src={downArrow}
-              alt={"down"}
-              onClick={() => handleOnClick("marginPop")}
-            />
-            <div style={styleMarginPop}>
-              <ToggleMargin
-                marginInfo={ATTRIBUTE.BOX.MARGIN}
-                title={TITLE}
-                isReset={isReset}
-              />
-            </div>
-            <div className="backgroundTitle">background-color</div>
-            <img
-              className="color_pop"
-              src={downArrow}
-              alt={"down"}
-              onClick={() => handleOnClick("colorPop")}
-            />
-            <div style={styleColorPop}>
-              <ToggleColor />
-            </div>
-            <div className="composition">구성 컴포넌트</div>
-            <div className="tx">TEXT</div>
-            <div className="txComp">
-              <ul className="ulTx">{textComponents}</ul>
-            </div>
-            <div className="img">IMAGE</div>
-            <div className="imgComp">
-              <ul className="ulTx">{imageComponents}</ul>
-            </div>
-            <div className="vid">VIDEO</div>
-            <div className="vidComp">
-              <ul className="ulTx">{videoComponents}</ul>
-            </div>
-            <div className="regTitle">등록정보</div>
-            <div className="regDateTx">등록일</div>
-            <input
-              type="text"
-              className="regDate"
-              name="REGDATE"
-              value={REGDATE}
-              onChange={handleOnChange}
-            />
-            <div className="regNameTx">등록자</div>
-            <input
-              type="text"
-              className="propRegName"
-              name="REGNAME"
-              value={REGNAME}
-              onChange={handleOnChange}
-            />
-            <div className="mappingTitle">매핑정보</div>
-            <div className="field_tx">필드명</div>
-            <input
-              type="text"
-              className="field_input"
-              name="MAPPINGFIELD"
-              value={MAPPINGFIELD}
-              onChange={handleOnChange}
-            />
-            <div className="labelName">설명</div>
-            <div className="labelContent">
-              <textarea
-                rows="6"
-                cols="35"
-                value={DESCRIPTION}
+            <div className="propertyArea">
+              <input
+                type="text"
+                className="propertyTitle"
+                name="TITLE"
+                value={TITLE}
                 onChange={handleOnChange}
               />
+            </div>
+            <div className="propertyArea">
+              <div className="propertyLabel">Box</div>
+              <div className="propertyContent">
+                <span className="name">Width</span>
+                <input
+                  type="number"
+                  className="propertyWidth"
+                  name="WIDTH"
+                  value={WIDTH}
+                  onChange={handleOnChange}
+                />
+                <span className="name">px</span>
+                <span className="name">Height</span>
+                <input
+                  type="number"
+                  className="propertyHeight"
+                  name="HEIGHT"
+                  value={HEIGHT}
+                  onChange={handleOnChange}
+                />
+                <span className="name">px</span>
+              </div>
+              <div className="propertyContent">
+                <span className="name">Border</span>
+                <img
+                  className="toggleBtn"
+                  src={downArrow}
+                  alt={"down"}
+                  onClick={() => handleOnClick("borderPop")}
+                />
+                <div style={styleBorderPop}>
+                  <ToggleBorder
+                    borderInfo={ATTRIBUTE.BOX.BORDER}
+                    title={TITLE}
+                    isReset={isReset}
+                  />
+                </div>
+              </div>
+              <div className="propertyContent">
+                <span className="name">Padding</span>
+                <img
+                  className="toggleBtn"
+                  src={downArrow}
+                  alt={"down"}
+                  onClick={() => handleOnClick("paddingPop")}
+                />
+                <div style={stylePaddingPop}>
+                  <TogglePadding
+                    paddingInfo={ATTRIBUTE.BOX.PADDING}
+                    title={TITLE}
+                    isReset={isReset}
+                  />
+                </div>
+              </div>
+              <div className="propertyContent">
+                <span className="name">Margin</span>
+                <img
+                  className="toggleBtn"
+                  src={downArrow}
+                  alt={"down"}
+                  onClick={() => handleOnClick("marginPop")}
+                />
+                <div style={styleMarginPop}>
+                  <ToggleMargin
+                    marginInfo={ATTRIBUTE.BOX.MARGIN}
+                    title={TITLE}
+                    isReset={isReset}
+                  />
+                </div>
+              </div>
+              <div className="propertyContent">
+                <span className="name">Background-Color</span>
+                <img
+                  className="toggleBtn"
+                  src={downArrow}
+                  alt={"down"}
+                  onClick={() => handleOnClick("colorPop")}
+                />
+                <div style={styleColorPop}>
+                  <ToggleColor />
+                </div>
+              </div>
+            </div>
+            <div className="propertyArea">
+              <div className="propertyLabel">구성 컴포넌트</div>
+              <div className="propertyContent clearFix">
+                <div className="propertyComponentType">TEXT</div>
+                <div className="propertyComponentPart">
+                  <ul>{textComponents}</ul>
+                </div>
+              </div>
+              <div className="propertyContent clearFix">
+                <div className="propertyComponentType">IMAGE</div>
+                <div className="propertyComponentPart">
+                  <ul>{imageComponents}</ul>
+                </div>
+              </div>
+              <div className="propertyContent clearFix">
+                <div className="propertyComponentType">VIDEO</div>
+                <div className="propertyComponentPart">
+                  <ul>{videoComponents}</ul>
+                </div>
+              </div>
+            </div>
+            <div className="propertyArea clearFix">
+              <div className="propertyLabel">등록정보</div>
+              <div className="propertyContent">
+                <span className="name">등록일</span>
+                <input
+                  type="text"
+                  className="propertyRegDate"
+                  name="REGDATE"
+                  value={REGDATE}
+                  onChange={handleOnChange}
+                />
+              </div>
+              <div className="propertyContent">
+                <span className="name">등록자</span>
+                <input
+                  type="text"
+                  className="propertyRegName"
+                  name="REGNAME"
+                  value={REGNAME}
+                  onChange={handleOnChange}
+                />
+              </div>
+            </div>
+            <div className="propertyArea">
+              <div className="propertyLabel">설명</div>
+              <div className="propertyContent">
+                <div className="propertyDescription">
+                  <textarea
+                    rows="6"
+                    cols="35"
+                    name="DESCRIPTION"
+                    value={DESCRIPTION}
+                    onChange={handleOnChange}
+                  />
+                </div>
+              </div>
             </div>
           </div>
           <div className="prop_button">

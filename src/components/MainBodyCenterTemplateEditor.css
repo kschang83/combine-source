@@ -49,6 +49,7 @@
   height: 680px;
   margin: 20px 40px;
   position: relative;
+  overflow: auto;
 }
 
 .editorFooter {

@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import "./TemplateEditor.css";
+import "./Toggle.css";
 
 //component 속성 - Margin
 const ToggleMargin = margin => {
@@ -53,39 +54,51 @@ const ToggleMargin = margin => {
   }, [margin.title]);
 
   return (
-    <div className="pop_margin">
-      <div className="pop_margin_top">margin-top</div>
-      <input
-        type="number"
-        className="pop_margin_top_input"
-        value={pop_margin_top_input}
-        onChange={handleVal}
-      />
-      <div className="pop_margin_top_px">px</div>
-      <div className="pop_margin_right">margin-right</div>
-      <input
-        type="number"
-        className="pop_margin_right_input"
-        value={pop_margin_right_input}
-        onChange={handleVal}
-      />
-      <div className="pop_margin_right_px">px</div>
-      <div className="pop_margin_bottom">margin-bottom</div>
-      <input
-        type="number"
-        className="pop_margin_bottom_input"
-        value={pop_margin_bottom_input}
-        onChange={handleVal}
-      />
-      <div className="pop_margin_bottom_px">px</div>
-      <div className="pop_margin_left">margin-left</div>
-      <input
-        type="number"
-        className="pop_margin_left_input"
-        value={pop_margin_left_input}
-        onChange={handleVal}
-      />
-      <div className="pop_margin_left_px">px</div>
+    <div className="toggleBox paddingArea">
+      <div className="toggleContent">
+        <span className="title">margin-top</span>
+        <input
+          type="number"
+          className="togglePaddingTop"
+          name="pop_margin_top_input"
+          value={pop_margin_top_input}
+          onChange={handleVal}
+        />
+        <span className="title">px</span>
+      </div>
+      <div className="toggleContent">
+        <span className="title">margin-right</span>
+        <input
+          type="number"
+          className="togglePaddingTop"
+          name="pop_margin_right_input"
+          value={pop_margin_right_input}
+          onChange={handleVal}
+        />
+        <span className="title">px</span>
+      </div>
+      <div className="toggleContent">
+        <span className="title">margin-bottom</span>
+        <input
+          type="number"
+          className="togglePaddingTop"
+          name="pop_margin_bottom_input"
+          value={pop_margin_bottom_input}
+          onChange={handleVal}
+        />
+        <span className="title">px</span>
+      </div>
+      <div className="toggleContent">
+        <span className="title">margin-left</span>
+        <input
+          type="number"
+          className="togglePaddingTop"
+          name="pop_margin_left_input"
+          value={pop_margin_left_input}
+          onChange={handleVal}
+        />
+        <span className="title">px</span>
+      </div>
     </div>
   );
 };

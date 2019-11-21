@@ -59,7 +59,8 @@ const initialState = {
     tabActive: false,
     tabIndex: 0
   },
-  initialStatus: true
+  //initialStatus: true
+  initialStatus: false
 };
 
 // 리듀서

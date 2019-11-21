@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import "./TemplateEditor.css";
+import "./Toggle.css";
 
 //component 속성 - Border
 const ToggleBorder = border => {
@@ -34,30 +35,35 @@ const ToggleBorder = border => {
   };
 
   return (
-    <div className="pop_border">
-      <div className="pop_border_width">border-width</div>
-      <input
-        type="number"
-        className="pop_border_width_input"
-        name="width"
-        value={width}
-        onChange={handleVal}
-      />
-      <div className="pop_border_width_px">px</div>
-      <div className="pop_border_style">border-style</div>
-      <select
-        className="pop_border_style_section"
-        value={borderStyle}
-        onChange={handleChange}
-      >
-        <option value="none">none</option>
-        <option value="dashed">dashed</option>
-        <option value="dotted">dotted</option>
-        <option value="double">double</option>
-        <option value="groove">groove</option>
-      </select>
-      <div className="pop_border_color">border-color</div>
-      <div className="pop_border_color_section"></div>
+    <div className="toggleBox">
+      <div className="toggleContent">
+        <span className="title">border-width</span>
+        <input
+          type="number"
+          className="toggleBorderWidth"
+          name="width"
+          value={width}
+          onChange={handleVal}
+        />
+        <span className="title">px</span>
+      </div>
+      <div className="toggleContent">
+        <span className="title">border-style</span>
+        <select
+          className="pop_border_style_section"
+          value={borderStyle}
+          onChange={handleChange}
+        >
+          <option value="none">none</option>
+          <option value="dashed">dashed</option>
+          <option value="dotted">dotted</option>
+          <option value="double">double</option>
+          <option value="groove">groove</option>
+        </select>
+      </div>
+      <div className="toggleContent">
+        <span className="title">border-color</span>
+      </div>
     </div>
   );
 };

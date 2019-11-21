@@ -1,0 +1,46 @@
+.toggleBox {
+  width: 200px;
+  height: 100px;
+  border: 1px solid white;
+  border-radius: 9px;
+  padding: 0px 10px 0px 5px;
+}
+
+.toggleBox .toggleContent {
+  text-align: left;
+  margin: 5px 0px 10px 5px;
+  min-height: 25px;
+}
+
+.toggleBox .toggleContent .title {
+  width: 100px;
+  font-size: 14px;
+  color: #548c7d;
+}
+
+.toggleBorderWidth {
+  border-bottom: 1px solid #a59292;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  width: 70px;
+  margin-left: 0.7rem;
+  margin-top: 0.4rem;
+  text-align: right;
+}
+
+.togglePaddingTop {
+  border-bottom: 1px solid #a59292;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  width: 70px;
+  margin-left: 0.7rem;
+  margin-top: 0.4rem;
+  text-align: right;
+}
+
+.paddingArea {
+  width: 250px;
+  height: 140px;
+}
