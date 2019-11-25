@@ -1,0 +1,208 @@
+.propertyArea {
+  width: 95%;
+  padding: 10px 5px;
+}
+
+.propertyArea .propertyLabel {
+  width: 100%;
+  margin: 5px 0px 5px 5px;
+  color: #556998;
+  font-size: 15px;
+  font-weight: 550;
+  text-align: left;
+}
+
+.propertyArea .propertyContent {
+  text-align: left;
+  margin: 5px 0px 10px 5px;
+  min-height: 25px;
+}
+
+.propertyArea .propertyContent .name {
+  width: 55px;
+  padding-left: 5px;
+  padding-right: 10px;
+  font-size: 14px;
+  color: #a09d9d;
+  font-weight: 550;
+}
+
+.propertyTitle {
+  text-align: center;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid #a59292;
+  width: 122px;
+  font-size: 14px;
+  height: 50px;
+}
+
+.propertyWidth,
+.propertyHeight,
+.propertyFontSize,
+.propertyLineHeight {
+  border-bottom: 1px solid #a59292;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  width: 45px;
+  margin-top: 0.3rem;
+  text-align: right;
+  font-size: 13px;
+}
+
+.propertyComponentType {
+  font-size: 14px;
+  color: #a09d9d;
+  font-weight: 550;
+  width: 40px;
+  float: left;
+  padding-left: 5px;
+  padding-right: 10px;
+}
+
+.propertyComponentPart {
+  float: left;
+  padding: 0px 10px 5px;
+}
+
+.propertyComponentPart ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+.propertyComponentElement {
+  font-size: 13px;
+  color: #1c1c1c;
+  padding-bottom: 4px;
+}
+
+.propertyDescription {
+  padding: 5px 10px;
+}
+
+.propertyDescription textarea {
+  resize: none;
+}
+
+.propertyRegDate,
+.propertyRegName,
+.propertyUrl,
+.propertyMappingField {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid #a59292;
+  width: 162px;
+  margin-left: 10px;
+}
+
+.propertyArrayLeft {
+  width: 27px;
+  height: 22px;
+  margin-right: 10px;
+}
+.propertyArrayLeft:hover {
+  content: url("../img/aligned-to-the-left_hv.png");
+}
+.propertyArrayCenter {
+  width: 24px;
+  height: 22px;
+  margin-right: 10px;
+}
+.propertyArrayCenter:hover {
+  content: url("../img/center-align_hv.png");
+}
+.propertyArrayRight {
+  width: 26px;
+  height: 22px;
+  margin-right: 10px;
+}
+.propertyArrayRight:hover {
+  content: url("../img/align-text-right_hv.png");
+}
+.propertyArrayJustify {
+  width: 25px;
+  height: 22px;
+}
+.propertyArrayJustify:hover {
+  content: url("../img/justify_hv.png");
+}
+
+.propertyFontWeight {
+  border-bottom: 1px solid #a59292;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  width: 70px;
+  padding: 0.2rem;
+}
+
+.propertyFontFamily {
+  border-bottom: 1px solid #a59292;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  width: 81px;
+  padding: 0.2rem;
+}
+
+.propertyFontStyle {
+  border-bottom: 1px solid #a59292;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  width: 76px;
+  padding: 0.2rem;
+}
+
+.propertyIconType {
+  padding-left: 0.6rem;
+  width: 102px;
+  height: 29px;
+  font-size: 12px;
+  border: 1.5px solid #979f9a;
+  border-radius: 4px;
+  appearance: none;
+  background: url("../img/sort-arrows-couple-pointing-up-and-down.png")
+    no-repeat 92% 44%;
+  background-size: 15px 21px;
+  color: #3e5a48;
+  margin-right: 15px;
+}
+
+.propertyIconLoactionLabel {
+  font-size: 12px;
+  font-weight: 550;
+  color: #4e5b53;
+  margin-right: 5px;
+}
+.propertyIconLoaction {
+  width: 19px;
+  height: 20px;
+  margin-right: 15px;
+}
+
+.propertyLinkTargetLabel {
+  font-size: 12px;
+  font-weight: 550;
+  color: #4e5b53;
+  margin-right: 5px;
+}
+
+.propertyLinkTarget {
+  width: 18px;
+  height: 18px;
+  margin-right: 15px;
+}
+
+.toggleBtn {
+  width: 16px;
+  height: 19px;
+}
+
+.clearFix {
+  clear: both;
+}

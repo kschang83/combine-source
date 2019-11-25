@@ -10,7 +10,8 @@ import PropertyComponent from "./PropertyComponent.js";
 import TemplatePropDataContainer from "../containers/TemplatePropDataContainer";
 
 const MainBodyRightPropertyArea = ({ activeTabDatas, setActiveTab }) => {
-  const [tabIndex, setTabIndex] = useState(0);
+  //const [tabIndex, setTabIndex] = useState(0);
+  const [tabIndex, setTabIndex] = useState(1);
 
   useEffect(() => {
     const isActive = activeTabDatas.tabActive;

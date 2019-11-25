@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import ReactModal from "react-modal";
 import { Container, Draggable } from "react-smooth-dnd";
+import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
 import "./TemplateEditor.css";
 import "./TemplateEditorMain.css";
@@ -65,6 +66,10 @@ const MainBodyCenterTemplateEditor = ({
     boxLeft: 300,
     boxTop: 0
   });
+  const [innerComponent, setInnerComponent] = useState({
+    choiceId: "",
+    choiceData: {}
+  });
   const editorMainArea = useRef(null);
 
   const { inputTitle, inputWidth, inputHeight } = inputDatas;
@@ -82,6 +87,7 @@ const MainBodyCenterTemplateEditor = ({
   } = datas;
   const { isTemplate, isEmpty, isNew } = editFlag;
   const { boxWidth, boxHeight, boxLeft, boxTop } = areaSize;
+  const { choiceId, choiceData } = innerComponent;
 
   useEffect(() => {
     setDatas({
@@ -228,7 +234,8 @@ const MainBodyCenterTemplateEditor = ({
       TYPE: payload.TYPE,
       CATEGORY: payload.CATEGORY,
       TITLE: payload.TITLE,
-      SORTIDX: addedIndex
+      SORTIDX: addedIndex,
+      ATTRIBUTE: payload.ATTRIBUTE
     };
 
     if (removedIndex !== null) {
@@ -256,11 +263,6 @@ const MainBodyCenterTemplateEditor = ({
 
     setDatas(newDatas);
     insert(newDatas);
-  };
-
-  // 배치된 컴포넌트 더블클릭 시, 우측 컴포넌트 속성 영역 활성화 및 데이터 노출
-  const onDblClick = e => {
-    console.log(e);
   };
 
   // 템플릿 저장
@@ -331,6 +333,11 @@ const MainBodyCenterTemplateEditor = ({
     });
   };
 
+  const dndContainerStyle = {
+    minHeight: HEIGHT === 0 ? "100px" : HEIGHT + "px",
+    minWidth: WIDTH === 0 ? "100px" : WIDTH + "px"
+  };
+
   const templateEditBoxStyle = {
     position: "absolute",
     left: boxLeft + "px",
@@ -339,9 +346,150 @@ const MainBodyCenterTemplateEditor = ({
     height: HEIGHT === 0 ? "600px" : HEIGHT + "px"
   };
 
-  const dndContainerStyle = {
-    minHeight: HEIGHT === 0 ? "100px" : HEIGHT + "px",
-    minWidth: WIDTH === 0 ? "100px" : WIDTH + "px"
+  const makeInlineStyle = (type, infos) => {
+    switch (type) {
+      case "BORDER":
+        const templateAreaBorderWidth =
+          infos.BORDERWIDTH > 0 ? infos.BORDERWIDTH + "px" : "";
+        const templateAreaBorderStyle =
+          infos.BORDERSTYLE !== "" ? infos.BORDERSTYLE : "";
+        const templateAreaBorderColor =
+          infos.BORDERCOLOR !== "" ? infos.BORDERCOLOR : "";
+        return (
+          templateAreaBorderWidth +
+          " " +
+          templateAreaBorderStyle +
+          " " +
+          templateAreaBorderColor
+        );
+      case "PADDING":
+        return (
+          infos.PADDINGTOP +
+          "px " +
+          infos.PADDINGRIGHT +
+          "px " +
+          infos.PADDINGBOTTOM +
+          "px " +
+          infos.PADDINGLEFT +
+          "px"
+        );
+      case "MARGIN":
+        return (
+          infos.MARGINTOP +
+          "px " +
+          infos.MARGINRIGHT +
+          "px " +
+          infos.MARGINBOTTOM +
+          "px " +
+          infos.MARGINLEFT +
+          "px"
+        );
+      default:
+        return "";
+    }
+  };
+  const templateRealArea = {
+    border: makeInlineStyle("BORDER", ATTRIBUTE.BOX.BORDER),
+    padding: makeInlineStyle("PADDING", ATTRIBUTE.BOX.PADDING),
+    margin: makeInlineStyle("MARGIN", ATTRIBUTE.BOX.MARGIN),
+    width: WIDTH + "px",
+    height: HEIGHT + "px"
+  };
+
+  const handleInnerComponent = (e, d, target) => {
+    e.preventDefault();
+    const action = d.action;
+    const lookupData = COMPONENT.filter(list => list.ID === choiceId)[0];
+
+    const infos = {
+      removedIndex: lookupData.SORTIDX,
+      addedIndex: null,
+      payload: lookupData
+    };
+
+    switch (action) {
+      case "edit":
+        innerComponentEdit(lookupData);
+        break;
+      case "delete":
+        applyDragInEditor(COMPONENT, infos);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const innerComponentEdit = d => {
+    alert("편집");
+  };
+
+  const makeInnerComponent = compo => {
+    console.log(compo);
+
+    let cWidth =
+      compo.ATTRIBUTE.BOX.WIDTH > 0 ? compo.ATTRIBUTE.BOX.WIDTH + "px" : "";
+    let cHeight =
+      compo.ATTRIBUTE.BOX.HEIGHT > 0 ? compo.ATTRIBUTE.BOX.HEIGHT + "px" : "";
+    const textAlign = compo.ATTRIBUTE.BOX.TEXTALIGN;
+    const backgroundColor = compo.ATTRIBUTE.BOX.BACKGROUNDCOLOR;
+    const lineHeight =
+      compo.ATTRIBUTE.FONT.LINEHEIGHT > 0
+        ? compo.ATTRIBUTE.FONT.LINEHEIGHT + "px"
+        : "";
+    const fontSize =
+      compo.ATTRIBUTE.FONT.FONTSIZE > 0
+        ? compo.ATTRIBUTE.FONT.FONTSIZE + "px"
+        : "";
+    const fontWeight = compo.ATTRIBUTE.FONT.FONTWEIGHT;
+    const fontFamily = compo.ATTRIBUTE.FONT.FONTFAMILY;
+    const fontStyle = compo.ATTRIBUTE.FONT.FONTSTYLE;
+    const color = compo.ATTRIBUTE.FONT.COLOR;
+
+    const border =
+      compo.ATTRIBUTE.BOX.BORDER.BORDERWIDTH > 0
+        ? makeInlineStyle("BORDER", compo.ATTRIBUTE.BOX.BORDER)
+        : "";
+    const padding = makeInlineStyle("PADDING", compo.ATTRIBUTE.BOX.PADDING);
+    const margin = makeInlineStyle("MARGIN", compo.ATTRIBUTE.BOX.MARGIN);
+
+    if (cWidth > WIDTH) cWidth = WIDTH;
+
+    const innerComponentStyle = {
+      width: cWidth + "px",
+      height: cHeight + "px",
+      textAlign: textAlign,
+      backgroundColor: backgroundColor,
+      lineHeight: lineHeight,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      fontFamily: fontFamily,
+      fontStyle: fontStyle,
+      color: color,
+      border: border,
+      padding: padding,
+      margin: margin
+    };
+
+    /*
+    return (
+      <ContextMenuTrigger
+        id="innerComponentContextMenu"
+        key={"inner_" + compo.ID}
+        collect={() =>
+          setInnerComponent({
+            ...innerComponent,
+            choiceId: compo.ID
+          })
+        }
+      >
+        <div style={innerComponentStyle}>{compo.TITLE}</div>
+      </ContextMenuTrigger>
+    );
+    */
+
+    //return <div className="draggable-item">{compo.TITLE}</div>;
+
+    return <div style={innerComponentStyle}>{compo.TITLE}</div>;
   };
 
   return (
@@ -421,25 +569,37 @@ const MainBodyCenterTemplateEditor = ({
               편집 작업을 진행할 템플릿을 좌측 목록에서 Drag하여 Drop하세요.
             </div>
           ) : (
-            <Container
-              groupName="dragndropArea"
-              getChildPayload={i => COMPONENT[i]}
-              onDrop={e => applyDragInEditor(COMPONENT, e)}
-              render={ref => (
-                <div style={dndContainerStyle} ref={ref}>
-                  {COMPONENT.map(compo => (
-                    <Draggable key={compo.ID}>
-                      <div
-                        className="draggable-item"
-                        onDoubleClick={onDblClick}
-                      >
-                        {compo.TITLE}
-                      </div>
-                    </Draggable>
-                  ))}
-                </div>
-              )}
-            ></Container>
+            <div style={templateRealArea}>
+              <Container
+                groupName="dragndropArea"
+                getChildPayload={i => COMPONENT[i]}
+                onDrop={e => applyDragInEditor(COMPONENT, e)}
+                render={ref => (
+                  <div style={dndContainerStyle} ref={ref}>
+                    {COMPONENT.map(compo => (
+                      <Draggable
+                        key={compo.ID}
+                        render={() => makeInnerComponent(compo)}
+                      ></Draggable>
+                    ))}
+                  </div>
+                )}
+              ></Container>
+              <ContextMenu id="innerComponentContextMenu">
+                <MenuItem
+                  data={{ action: "edit" }}
+                  onClick={handleInnerComponent}
+                >
+                  컴포넌트 편집
+                </MenuItem>
+                <MenuItem
+                  data={{ action: "delete" }}
+                  onClick={handleInnerComponent}
+                >
+                  컴포넌트 제거
+                </MenuItem>
+              </ContextMenu>
+            </div>
           )}
         </div>
       </div>

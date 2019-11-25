@@ -5,7 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import downArrow from "../img/arrow-down-sign-to-navigate.png";
 import "./TemplateEditor.css";
 import "./TemplateEditorMain.css";
-import "./PropertyTemplate.css";
+import "./Property.css";
 
 import ToggleBorder from "./ToggleBorder.js";
 import TogglePadding from "./TogglePadding.js";
@@ -132,15 +132,16 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
 
   const textComponents = COMPONENT.map(component =>
     component.TYPE === "TEXT" ? (
-      <li key={component.ID}>
-        {component.TITLE} ({component.CATEGORY}) {component.SORTIDX}{" "}
+      <li className="propertyComponentElement" key={component.ID}>
+        {component.SORTIDX + "."} {component.TITLE} ({component.CATEGORY})
       </li>
     ) : null
   );
 
   const imageComponents = COMPONENT.map(component =>
     component.TYPE === "IMAGE" ? (
-      <li key={component.ID}>
+      <li className="propertyComponentElement" key={component.ID}>
+        {component.SORTIDX + "."}
         {component.TITLE} ({component.CATEGORY}) {component.SORTIDX}{" "}
       </li>
     ) : null
@@ -148,7 +149,8 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
 
   const videoComponents = COMPONENT.map(component =>
     component.TYPE === "VIDEO" ? (
-      <li key={component.ID}>
+      <li className="propertyComponentElement" key={component.ID}>
+        {component.SORTIDX + "."}
         {component.TITLE} ({component.CATEGORY}) {component.SORTIDX}{" "}
       </li>
     ) : null
@@ -156,7 +158,7 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
 
   //초기화
   const reset = () => {
-    const propEditDatas = {
+    setDatas({
       ID: editDatas.ID,
       TITLE: editDatas.TITLE,
       DESCRIPTION: editDatas.DESCRIPTION,
@@ -167,8 +169,7 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
       REGDATE: editDatas.REGDATE,
       REGNAME: editDatas.REGNAME,
       MAPPINGFIELD: editDatas.MAPPINGFIELD
-    };
-    setDatas(propEditDatas);
+    });
 
     setShowPop({
       borderPop: false,
@@ -183,6 +184,7 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
 
   // 저장
   const save = () => {
+    alert("템플릿 속성 저장");
     insert(datas);
   };
 

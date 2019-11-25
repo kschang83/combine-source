@@ -42,7 +42,7 @@ const initialState = {
         },
         MARGIN: {
           MARGINTOP: 0,
-          MARGINRIGHT: 30,
+          MARGINRIGHT: 0,
           MARGINBOTTOM: 0,
           MARGINLEFT: 0
         },
@@ -59,8 +59,7 @@ const initialState = {
     tabActive: false,
     tabIndex: 0
   },
-  //initialStatus: true
-  initialStatus: false
+  initialStatus: true
 };
 
 // 리듀서
