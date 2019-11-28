@@ -4,10 +4,16 @@ import PropertyComponentText from "./PropertyComponentText.js";
 import PropertyComponentImage from "./PropertyComponentImage.js";
 import PropertyComponentVideo from "./PropertyComponentVideo.js";
 
-const PropertyComponent = () => {
+const PropertyComponent = ({
+  initComponent,
+  setInitComponent,
+  editDatasComponent,
+  insertComponent,
+  choiceType
+}) => {
   const [selectDatas, setSelectDatas] = useState({
-    selectType: "text",
-    isText: true,
+    selectType: "TEXT",
+    isText: false,
     isImage: false,
     isVideo: false,
     selectedEditingData: {}
@@ -21,11 +27,64 @@ const PropertyComponent = () => {
     selectedEditingData
   } = selectDatas;
 
+  useEffect(() => {
+    switch (choiceType) {
+      case "TEXT":
+        setSelectDatas({
+          ...selectDatas,
+          isText: true,
+          isImage: false,
+          isVideo: false
+        });
+        break;
+      case "IMAGE":
+        setSelectDatas({
+          ...selectDatas,
+          isText: false,
+          isImage: true,
+          isVideo: false
+        });
+        break;
+      case "VIDEO":
+        setSelectDatas({
+          ...selectDatas,
+          isText: false,
+          isImage: false,
+          isVideo: true
+        });
+        break;
+      default:
+        break;
+    }
+  }, [choiceType]);
+
   return (
     <Fragment>
-      {isText ? <PropertyComponentText /> : null}
-      {isImage ? <PropertyComponentImage /> : null}
-      {isVideo ? <PropertyComponentVideo /> : null}
+      {initComponent.empty ? null : (
+        <div>
+          {isText ? (
+            <PropertyComponentText
+              editDatasComponent={editDatasComponent}
+              insertComponent={insertComponent}
+              setInitComponent={setInitComponent}
+            />
+          ) : null}
+          {isImage ? (
+            <PropertyComponentImage
+              editDatasComponent={editDatasComponent}
+              insertComponent={insertComponent}
+              setInitComponent={setInitComponent}
+            />
+          ) : null}
+          {isVideo ? (
+            <PropertyComponentVideo
+              editDatasComponent={editDatasComponent}
+              insertComponent={insertComponent}
+              setInitComponent={setInitComponent}
+            />
+          ) : null}
+        </div>
+      )}
     </Fragment>
   );
 };

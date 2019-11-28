@@ -3,14 +3,10 @@ import { connect } from "react-redux";
 import { insert } from "../modules/templatePropData";
 import PropertyTemplate from "../components/PropertyTemplate";
 
-const TemplatePropDataContainer = ({
-  initialStatus,
-  templateDatas,
-  insert
-}) => {
+const TemplatePropDataContainer = ({ initTemplate, templateDatas, insert }) => {
   return (
     <PropertyTemplate
-      initialStatus={initialStatus}
+      initTemplate={initTemplate}
       editDatas={templateDatas}
       insert={insert}
     />
@@ -20,7 +16,7 @@ const TemplatePropDataContainer = ({
 export default connect(
   state => ({
     templateDatas: state.templatePropData.templateDatas,
-    initialStatus: state.templatePropData.initialStatus
+    initTemplate: state.activePropTab.initTemplate
   }),
   { insert }
 )(TemplatePropDataContainer);

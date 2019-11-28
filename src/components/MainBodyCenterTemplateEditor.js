@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import ReactModal from "react-modal";
 import { Container, Draggable } from "react-smooth-dnd";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
@@ -8,12 +8,18 @@ import "./TemplateEditorMain.css";
 import "./MainBodyCenterTemplateEditor.css";
 
 import newTemplateIcon from "../img/positive-sign.png";
+import deleteIcon from "../img/wastebasket.png";
+import editIcon from "../img/editIcon.png";
 
 const MainBodyCenterTemplateEditor = ({
   editDatas,
   insert,
+  editDatasComponent,
+  insertComponent,
   setActiveTab,
-  setInit
+  setInitTemplate,
+  setInitComponent,
+  initComponent
 }) => {
   const [isOpenDlg, setIsOpenDlg] = useState(false);
   const [editFlag, setEditFlag] = useState({
@@ -68,7 +74,9 @@ const MainBodyCenterTemplateEditor = ({
   });
   const [innerComponent, setInnerComponent] = useState({
     choiceId: "",
-    choiceData: {}
+    choiceData: {},
+    choiceSortId: "",
+    isChoice: false
   });
   const editorMainArea = useRef(null);
 
@@ -87,7 +95,7 @@ const MainBodyCenterTemplateEditor = ({
   } = datas;
   const { isTemplate, isEmpty, isNew } = editFlag;
   const { boxWidth, boxHeight, boxLeft, boxTop } = areaSize;
-  const { choiceId, choiceData } = innerComponent;
+  const { choiceId, choiceData, choiceSortId, isChoice } = innerComponent;
 
   useEffect(() => {
     setDatas({
@@ -107,6 +115,34 @@ const MainBodyCenterTemplateEditor = ({
       adjustBox(editDatas.WIDTH, editDatas.HEIGHT);
     }
   }, [editDatas]);
+
+  useEffect(() => {
+    const innerCompoId = editDatasComponent.ID;
+    const innerCompoSortIdx = editDatasComponent.SORTIDX;
+
+    // 아이디와 정렬순서를 가지고, COMPONENT 에서 일치하는 배열위치를 찾고, editDatasComponent 로 내용을 변경
+    // const lookupData = COMPONENT.filter(list => list.ID === innerCompoId && list.SORTIDX === innerCompoSortIdx)[0];
+
+    const change = [];
+    COMPONENT.forEach(function(item, index) {
+      let arr = {};
+      if (item.ID === innerCompoId && item.SORTIDX === innerCompoSortIdx) {
+        arr = editDatasComponent;
+      } else {
+        arr = { ...item };
+      }
+
+      change.push(arr);
+    });
+
+    const newDatas = {
+      ...datas,
+      COMPONENT: change
+    };
+
+    setDatas(newDatas);
+    insert(newDatas);
+  }, [editDatasComponent]);
 
   // 에디팅 div 영역 가운데 정렬
   const adjustBox = (w, h) => {
@@ -178,6 +214,17 @@ const MainBodyCenterTemplateEditor = ({
       return false;
     }
 
+    if (!isEmpty) {
+      if (
+        !window.confirm(
+          "아직 편집 중인 템플릿이 배치되어 있습니다.\r\n그래도 신규 템플릿을 생성하시겠습니까? (확인을 클릭하면, 기존 편집 중인 템플릿 정보가 모두 소실됩니다.)"
+        )
+      ) {
+        setIsOpenDlg(false);
+        return false;
+      }
+    }
+
     // 신규 템플릿 생성 다이얼로그 닫기 (state)
     setIsOpenDlg(false);
 
@@ -189,7 +236,7 @@ const MainBodyCenterTemplateEditor = ({
     });
 
     // 우측 템플릿 속성영역 사용여부 (false로 셋팅해야 보임)
-    setInit(false);
+    setInitTemplate(false);
 
     // 우측 속성탭 활성화 여부
     setActiveTab({
@@ -198,10 +245,38 @@ const MainBodyCenterTemplateEditor = ({
     });
 
     const newDatas = {
-      ...datas,
+      ID: "",
       TITLE: inputTitle,
+      DESCRIPTION: "",
       WIDTH: inputWidth,
-      HEIGHT: inputHeight
+      HEIGHT: inputHeight,
+      ATTRIBUTE: {
+        BOX: {
+          BORDER: {
+            BORDERWIDTH: 0,
+            BORDERSTYLE: "",
+            BORDERCOLOR: ""
+          },
+          PADDING: {
+            PADDINGTOP: 0,
+            PADDINGRIGHT: 0,
+            PADDINGBOTTOM: 0,
+            PADDINGLEFT: 0
+          },
+          MARGIN: {
+            MARGINTOP: 0,
+            MARGINRIGHT: 0,
+            MARGINBOTTOM: 0,
+            MARGINLEFT: 0
+          },
+          BACKGROUNDCOLOR: "",
+          TEXTALIGN: ""
+        }
+      },
+      COMPONENT: [],
+      REGDATE: "",
+      REGNAME: "",
+      MAPPINGFIELD: ""
     };
 
     setDatas(newDatas); // state 반영
@@ -222,11 +297,6 @@ const MainBodyCenterTemplateEditor = ({
     const { removedIndex, addedIndex, payload } = dragResult;
     if (removedIndex === null && addedIndex === null) return arr;
 
-    console.log("arr", arr);
-    console.log("removedIndex", removedIndex);
-    console.log("addedIndex", addedIndex);
-    console.log("payload", payload);
-
     const result = [...arr];
     let itemToAdd = {
       ID: payload.ID,
@@ -246,8 +316,18 @@ const MainBodyCenterTemplateEditor = ({
       result.splice(addedIndex, 0, itemToAdd);
     }
 
+    let changeId = "";
     const sortResult = [];
     result.forEach(function(item, index) {
+      if (!initComponent.empty) {
+        const innerCompoId = editDatasComponent.ID;
+        const innerCompoSortIdx = editDatasComponent.SORTIDX;
+
+        if (innerCompoId === item.ID && innerCompoSortIdx === item.SORTIDX) {
+          changeId = index + "_" + item.ORGID;
+        }
+      }
+
       const arr = {
         ...item,
         ID: index + "_" + item.ORGID,
@@ -263,6 +343,25 @@ const MainBodyCenterTemplateEditor = ({
 
     setDatas(newDatas);
     insert(newDatas);
+
+    if (!initComponent.empty && changeId !== "") {
+      // 컴포넌트 속성탭이 열려있을때...(아직 편집 및 저장 전 상태)
+      // 템플릿 내 컴포넌트를 추가하거나 재배치하면 ID와 SORTIDX가 변동됨
+      // 이에 맞춰서 editDatasComponent 를 수정해야함
+
+      sortResult.forEach(function(item, index) {
+        if (item.ID === changeId) {
+          insertComponent({ ...item });
+        }
+      });
+    }
+
+    setInnerComponent({
+      ...innerComponent,
+      choiceId: payload.ID,
+      choiceSortId: addedIndex,
+      isChoice: false
+    });
   };
 
   // 템플릿 저장
@@ -312,7 +411,7 @@ const MainBodyCenterTemplateEditor = ({
     });
 
     // 우측 템플릿 속성영역 초기화
-    setInit(true);
+    setInitTemplate(true);
 
     setDatas(resetDatas); // state 초기화
     insert(resetDatas); // redux store 값 초기화 반영
@@ -388,6 +487,7 @@ const MainBodyCenterTemplateEditor = ({
         return "";
     }
   };
+
   const templateRealArea = {
     border: makeInlineStyle("BORDER", ATTRIBUTE.BOX.BORDER),
     padding: makeInlineStyle("PADDING", ATTRIBUTE.BOX.PADDING),
@@ -396,38 +496,68 @@ const MainBodyCenterTemplateEditor = ({
     height: HEIGHT + "px"
   };
 
-  const handleInnerComponent = (e, d, target) => {
-    e.preventDefault();
-    const action = d.action;
-    const lookupData = COMPONENT.filter(list => list.ID === choiceId)[0];
+  const innerComponentClick = (id, sortIdx) => {
+    setInnerComponent({
+      ...innerComponent,
+      choiceId: id,
+      choiceSortId: sortIdx,
+      isChoice: choiceId !== id ? true : !isChoice
+    });
+  };
 
-    const infos = {
-      removedIndex: lookupData.SORTIDX,
-      addedIndex: null,
-      payload: lookupData
-    };
+  const innerComponentDelete = () => {
+    if (window.confirm("배치된 컴포넌트를 제거하시겠습니까?")) {
+      const lookupData = COMPONENT.filter(list => list.ID === choiceId)[0];
+      const infos = {
+        removedIndex: lookupData.SORTIDX,
+        addedIndex: null,
+        payload: lookupData
+      };
 
-    switch (action) {
-      case "edit":
-        innerComponentEdit(lookupData);
-        break;
-      case "delete":
-        applyDragInEditor(COMPONENT, infos);
-        break;
-      default:
-        break;
+      if (!initComponent.empty) {
+        // 컴포넌트 속성탭이 열려있을때...(아직 편집 및 저장 전 상태)
+        // 제거를 하고자 하는 컴포넌트와 editDatasComponent 를 비교하여 동일하면 setInitComponent 를 클리어
+        if (choiceId === editDatasComponent.ID) {
+          if (
+            window.confirm(
+              "편집이 완료되지 않은 상태입니다.(오른쪽 Component 속성탭을 확인하세요.) 그래도 제거하시겠습니까?"
+            )
+          ) {
+            setInitComponent({
+              empty: true
+            });
+          }
+        }
+      }
+
+      applyDragInEditor(COMPONENT, infos);
     }
   };
 
-  const innerComponentEdit = d => {
-    alert("편집");
+  const innerComponentEdit = () => {
+    if (window.confirm("배치된 컴포넌트를 편집하시겠습니까?")) {
+      const lookupData = COMPONENT.filter(list => list.ID === choiceId)[0];
+
+      setActiveTab({
+        tabIndex: 1,
+        tabActive: true,
+        tabType: lookupData.TYPE
+      });
+
+      setInitComponent({
+        empty: false // false로  해야 보임
+      });
+      insertComponent(lookupData);
+    }
   };
 
   const makeInnerComponent = compo => {
-    console.log(compo);
-
     let cWidth =
-      compo.ATTRIBUTE.BOX.WIDTH > 0 ? compo.ATTRIBUTE.BOX.WIDTH + "px" : "";
+      compo.ATTRIBUTE.BOX.WIDTH === 0
+        ? ""
+        : compo.ATTRIBUTE.BOX.WIDTH > WIDTH
+        ? WIDTH + "px"
+        : compo.ATTRIBUTE.BOX.WIDTH + "px";
     let cHeight =
       compo.ATTRIBUTE.BOX.HEIGHT > 0 ? compo.ATTRIBUTE.BOX.HEIGHT + "px" : "";
     const textAlign = compo.ATTRIBUTE.BOX.TEXTALIGN;
@@ -452,11 +582,16 @@ const MainBodyCenterTemplateEditor = ({
     const padding = makeInlineStyle("PADDING", compo.ATTRIBUTE.BOX.PADDING);
     const margin = makeInlineStyle("MARGIN", compo.ATTRIBUTE.BOX.MARGIN);
 
-    if (cWidth > WIDTH) cWidth = WIDTH;
+    const outline =
+      choiceSortId === compo.SORTIDX && isChoice ? "red dashed 3px" : "";
+    const layerIcon =
+      choiceSortId === compo.SORTIDX && isChoice
+        ? "layerIcon"
+        : "layerIcon hidden";
 
     const innerComponentStyle = {
-      width: cWidth + "px",
-      height: cHeight + "px",
+      width: cWidth,
+      height: cHeight,
       textAlign: textAlign,
       backgroundColor: backgroundColor,
       lineHeight: lineHeight,
@@ -467,29 +602,27 @@ const MainBodyCenterTemplateEditor = ({
       color: color,
       border: border,
       padding: padding,
-      margin: margin
+      margin: margin,
+      outline: outline
     };
 
-    /*
     return (
-      <ContextMenuTrigger
-        id="innerComponentContextMenu"
-        key={"inner_" + compo.ID}
-        collect={() =>
-          setInnerComponent({
-            ...innerComponent,
-            choiceId: compo.ID
-          })
-        }
+      <div
+        style={innerComponentStyle}
+        onClick={() => innerComponentClick(compo.ID, compo.SORTIDX)}
       >
-        <div style={innerComponentStyle}>{compo.TITLE}</div>
-      </ContextMenuTrigger>
+        {compo.TITLE}
+
+        <div className={layerIcon}>
+          <div className="compoDelete" onClick={innerComponentDelete}>
+            <img src={deleteIcon} alt="deleteIcon" title="컴포넌트 제거" />
+          </div>
+          <div className="compoEdit" onClick={innerComponentEdit}>
+            <img src={editIcon} alt="editIcon" title="컴포넌트 편집" />
+          </div>
+        </div>
+      </div>
     );
-    */
-
-    //return <div className="draggable-item">{compo.TITLE}</div>;
-
-    return <div style={innerComponentStyle}>{compo.TITLE}</div>;
   };
 
   return (
@@ -585,20 +718,6 @@ const MainBodyCenterTemplateEditor = ({
                   </div>
                 )}
               ></Container>
-              <ContextMenu id="innerComponentContextMenu">
-                <MenuItem
-                  data={{ action: "edit" }}
-                  onClick={handleInnerComponent}
-                >
-                  컴포넌트 편집
-                </MenuItem>
-                <MenuItem
-                  data={{ action: "delete" }}
-                  onClick={handleInnerComponent}
-                >
-                  컴포넌트 제거
-                </MenuItem>
-              </ContextMenu>
             </div>
           )}
         </div>

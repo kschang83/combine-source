@@ -1,27 +1,50 @@
 import React from "react";
 import { connect } from "react-redux";
-import { insert, setActivePropTab, setInit } from "../modules/templatePropData";
+import { insert } from "../modules/templatePropData";
+import { insertComponent } from "../modules/componentPropData";
+import {
+  setActivePropTab,
+  setInitTemplate,
+  setInitComponent
+} from "../modules/activePropTab";
 import MainBodyCenterTemplateEditor from "../components/MainBodyCenterTemplateEditor";
 
 const TemplateEditDataContainer = ({
   templateDatas,
   insert,
+  componentDatas,
+  insertComponent,
   setActivePropTab,
-  setInit
+  setInitTemplate,
+  setInitComponent,
+  initComponent
 }) => {
   return (
     <MainBodyCenterTemplateEditor
       editDatas={templateDatas}
       insert={insert}
+      editDatasComponent={componentDatas}
+      insertComponent={insertComponent}
       setActiveTab={setActivePropTab}
-      setInit={setInit}
+      setInitTemplate={setInitTemplate}
+      setInitComponent={setInitComponent}
+      initComponent={initComponent}
     />
   );
 };
 
 export default connect(
   state => ({
-    templateDatas: state.templatePropData.templateDatas
+    templateDatas: state.templatePropData.templateDatas,
+    componentDatas: state.componentPropData.componentDatas,
+    activeTabDatas: state.activePropTab.activeTabDatas,
+    initComponent: state.activePropTab.initComponent
   }),
-  { insert, setActivePropTab, setInit }
+  {
+    insert,
+    insertComponent,
+    setActivePropTab,
+    setInitTemplate,
+    setInitComponent
+  }
 )(TemplateEditDataContainer);

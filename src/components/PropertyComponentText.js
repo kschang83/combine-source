@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -15,13 +15,19 @@ import TogglePadding from "./TogglePadding.js";
 import ToggleMargin from "./ToggleMargin.js";
 import ToggleColor from "./ToggleColor.js";
 
-const PropertyComponentText = () => {
+const PropertyComponentText = ({
+  editDatasComponent,
+  insertComponent,
+  setInitComponent
+}) => {
   const initialStateDatas = {
     isUse: true,
     type: "TEXT",
     id: "",
+    orgid: "",
     title: "",
     category: "",
+    sortidx: "",
     width: 0,
     height: 0,
     fontSize: 0,
@@ -53,8 +59,10 @@ const PropertyComponentText = () => {
     isUse,
     type,
     id,
+    orgid,
     title,
     category,
+    sortidx,
     width,
     height,
     fontSize,
@@ -73,6 +81,34 @@ const PropertyComponentText = () => {
     attribute
   } = datas;
   const { borderPop, paddingPop, marginPop, colorPop } = showPop;
+
+  useEffect(() => {
+    setDatas({
+      ...datas,
+      type: editDatasComponent.TYPE,
+      id: editDatasComponent.ID,
+      orgid: editDatasComponent.ORGID,
+      title: editDatasComponent.TITLE,
+      category: editDatasComponent.CATEGORY,
+      sortidx: editDatasComponent.SORTIDX,
+      width: editDatasComponent.ATTRIBUTE.BOX.WIDTH,
+      height: editDatasComponent.ATTRIBUTE.BOX.HEIGHT,
+      fontSize: editDatasComponent.ATTRIBUTE.FONT.FONTSIZE,
+      fontWeight: editDatasComponent.ATTRIBUTE.FONT.FONTWEIGHT,
+      fontFamily: editDatasComponent.ATTRIBUTE.FONT.FONTFAMILY,
+      fontStyle: editDatasComponent.ATTRIBUTE.FONT.FONTSTYLE,
+      lineHeight: editDatasComponent.ATTRIBUTE.FONT.LINEHEIGHT,
+      url: editDatasComponent.ATTRIBUTE.LINK.URL,
+      urlTarget: editDatasComponent.ATTRIBUTE.LINK.TARGET,
+      mappingField: editDatasComponent.ATTRIBUTE.MAPPING.FIELD,
+      iconType: editDatasComponent.ATTRIBUTE.ICON.TYPE,
+      iconLocation: editDatasComponent.ATTRIBUTE.ICON.LOCATION,
+      borderDatas: editDatasComponent.ATTRIBUTE.BOX.BORDER,
+      paddingDatas: editDatasComponent.ATTRIBUTE.BOX.PADDING,
+      marginDatas: editDatasComponent.ATTRIBUTE.BOX.MARGIN,
+      attribute: editDatasComponent.ATTRIBUTE
+    });
+  }, [editDatasComponent]);
 
   const handleOnChange = e => {
     setDatas({
@@ -123,7 +159,53 @@ const PropertyComponentText = () => {
 
   // 저장
   const save = () => {
-    alert("저장");
+    if (window.confirm("컴포넌트 속성을 저장하여 반영하시겠습니까?")) {
+      const saveData = {
+        TYPE: type,
+        ID: id,
+        ORGID: orgid,
+        CATEGORY: category,
+        TITLE: title,
+        SORTIDX: sortidx,
+        ATTRIBUTE: {
+          BOX: {
+            WIDTH: width,
+            HEIGHT: height,
+            BORDER: borderDatas,
+            PADDING: paddingDatas,
+            MARGIN: marginDatas,
+            BACKGROUNDCOLOR: "#FFFFFF",
+            TEXTALIGN: ""
+          },
+          ICON: {
+            TYPE: iconType,
+            NUMBER: editDatasComponent.ATTRIBUTE.ICON.NUMBER, // 추후 수정
+            LOCATION: iconLocation
+          },
+          FONT: {
+            FONTFAMILY: fontFamily,
+            FONTSIZE: fontSize,
+            FONTSTYLE: fontStyle,
+            FONTWEIGHT: fontWeight,
+            COLOR: editDatasComponent.ATTRIBUTE.FONT.COLOR, // 추후 수정
+            LINEHEIGHT: lineHeight
+          },
+          LINK: {
+            URL: url,
+            TARGET: urlTarget
+          },
+          MAPPING: {
+            FIELD: mappingField
+          }
+        }
+      };
+
+      insertComponent(saveData);
+      setInitComponent({
+        empty: true,
+        editInfo: {}
+      });
+    }
   };
 
   return (
@@ -142,7 +224,9 @@ const PropertyComponentText = () => {
           <div className="propertyLabel">Type</div>
           <div className="propertyContent">
             <span className="name">{type}</span>
-            <span className="name">{category}</span>
+            <span className="name">
+              {category} {sortidx}
+            </span>
           </div>
         </div>
         <div className="propertyArea">

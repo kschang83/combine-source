@@ -1,22 +1,10 @@
 // 액션 타입 정의
 const INSERT = "templatePropData/INSERT";
-const ACTIVE_PROP_TAB = "templatePropData/ACTIVE_PROP_TAB";
-const SET_INIT = "templatePropData/SET_INIT";
 
 // 액션 생성 함수
 export const insert = templateDatas => ({
   type: INSERT,
   templateDatas
-});
-
-export const setActivePropTab = activeTabDatas => ({
-  type: ACTIVE_PROP_TAB,
-  activeTabDatas
-});
-
-export const setInit = initialStatus => ({
-  type: SET_INIT,
-  initialStatus
 });
 
 // 초기 상태
@@ -54,12 +42,7 @@ const initialState = {
     REGDATE: "",
     REGNAME: "",
     MAPPINGFIELD: ""
-  },
-  activeTabDatas: {
-    tabActive: false,
-    tabIndex: 0
-  },
-  initialStatus: true
+  }
 };
 
 // 리듀서
@@ -80,19 +63,6 @@ function templatePropData(state = initialState, action) {
           REGNAME: action.templateDatas.REGNAME,
           MAPPINGFIELD: action.templateDatas.MAPPINGFIELD
         }
-      };
-    case ACTIVE_PROP_TAB:
-      return {
-        ...state,
-        activeTabDatas: {
-          tabActive: action.activeTabDatas.tabActive,
-          tabIndex: action.activeTabDatas.tabIndex
-        }
-      };
-    case SET_INIT:
-      return {
-        ...state,
-        initialStatus: action.initialStatus
       };
     default:
       return state;

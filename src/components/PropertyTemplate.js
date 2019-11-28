@@ -12,7 +12,7 @@ import TogglePadding from "./TogglePadding.js";
 import ToggleMargin from "./ToggleMargin.js";
 import ToggleColor from "./ToggleColor.js";
 
-const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
+const PropertyTemplate = ({ initTemplate, editDatas, insert }) => {
   const [datas, setDatas] = useState({
     ID: "",
     TITLE: "",
@@ -132,7 +132,11 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
 
   const textComponents = COMPONENT.map(component =>
     component.TYPE === "TEXT" ? (
-      <li className="propertyComponentElement" key={component.ID}>
+      <li
+        className="propertyComponentElement"
+        key={component.ID}
+        onClick={() => clickInnerComponent(component)}
+      >
         {component.SORTIDX + "."} {component.TITLE} ({component.CATEGORY})
       </li>
     ) : null
@@ -140,7 +144,11 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
 
   const imageComponents = COMPONENT.map(component =>
     component.TYPE === "IMAGE" ? (
-      <li className="propertyComponentElement" key={component.ID}>
+      <li
+        className="propertyComponentElement"
+        key={component.ID}
+        onClick={() => clickInnerComponent(component)}
+      >
         {component.SORTIDX + "."}
         {component.TITLE} ({component.CATEGORY}) {component.SORTIDX}{" "}
       </li>
@@ -149,48 +157,37 @@ const PropertyTemplate = ({ initialStatus, editDatas, insert }) => {
 
   const videoComponents = COMPONENT.map(component =>
     component.TYPE === "VIDEO" ? (
-      <li className="propertyComponentElement" key={component.ID}>
+      <li
+        className="propertyComponentElement"
+        key={component.ID}
+        onClick={() => clickInnerComponent(component)}
+      >
         {component.SORTIDX + "."}
         {component.TITLE} ({component.CATEGORY}) {component.SORTIDX}{" "}
       </li>
     ) : null
   );
 
+  const clickInnerComponent = clkInfo => {
+    console.log(clkInfo);
+    alert("구성 컴포넌트 클릭하면 어디에 배치된 것인지 보여주라");
+  };
+
   //초기화
   const reset = () => {
-    setDatas({
-      ID: editDatas.ID,
-      TITLE: editDatas.TITLE,
-      DESCRIPTION: editDatas.DESCRIPTION,
-      WIDTH: editDatas.WIDTH,
-      HEIGHT: editDatas.HEIGHT,
-      ATTRIBUTE: editDatas.ATTRIBUTE,
-      COMPONENT: editDatas.COMPONENT,
-      REGDATE: editDatas.REGDATE,
-      REGNAME: editDatas.REGNAME,
-      MAPPINGFIELD: editDatas.MAPPINGFIELD
-    });
-
-    setShowPop({
-      borderPop: false,
-      paddingPop: false,
-      marginPop: false,
-      colorPop: false
-    });
-
-    setStartDate(new Date());
-    setReset(true);
+    alert("초기화");
   };
 
   // 저장
   const save = () => {
-    alert("템플릿 속성 저장");
-    insert(datas);
+    if (window.confirm("템플릿 속성을 저장하여 반영하시겠습니까?")) {
+      insert(datas);
+    }
   };
 
   return (
     <div className="TemplateProp">
-      {initialStatus ? null : (
+      {initTemplate ? null : (
         <Fragment>
           <div className="property_section">
             <div className="propertyArea">

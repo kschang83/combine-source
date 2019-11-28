@@ -8,27 +8,49 @@ import PropertyTemplate from "./PropertyTemplate.js";
 import PropertyComponent from "./PropertyComponent.js";
 
 import TemplatePropDataContainer from "../containers/TemplatePropDataContainer";
+import ComponentPropDataContainer from "../containers/ComponentPropDataContainer";
 
 const MainBodyRightPropertyArea = ({ activeTabDatas, setActiveTab }) => {
-  //const [tabIndex, setTabIndex] = useState(0);
-  const [tabIndex, setTabIndex] = useState(1);
+  const [tabActivation, setTabActivation] = useState({
+    tabIndex: 0,
+    tabChoiceType: ""
+  });
+  const { tabIndex, tabChoiceType } = tabActivation;
 
   useEffect(() => {
     const isActive = activeTabDatas.tabActive;
+    const activeTabIndex = activeTabDatas.tabIndex;
 
     if (isActive) {
-      setTabIndex(activeTabDatas.tabIndex);
+      switch (activeTabIndex) {
+        case 0:
+          setTabActivation({
+            ...tabActivation,
+            tabIndex: activeTabDatas.tabIndex
+          });
+          break;
+        case 1:
+          setTabActivation({
+            tabIndex: activeTabDatas.tabIndex,
+            tabChoiceType: activeTabDatas.tabType
+          });
+          break;
+        default:
+          break;
+      }
 
-      const activeTab = {
-        tabActive: false,
-        tabIndex: 0 // 0:템플릿속성Tab 1:컴포넌트속성Tab
-      };
-      setActiveTab(activeTab);
+      setActiveTab({
+        tabIndex: activeTabIndex, // 0:템플릿속성Tab 1:컴포넌트속성Tab
+        tabActive: false
+      });
     }
   }, [activeTabDatas.tabActive]);
 
   const handleOnSelectTab = (idx, lastIdx, evt) => {
-    setTabIndex(idx);
+    setTabActivation({
+      ...tabActivation,
+      tabIndex: idx
+    });
   };
 
   return (
@@ -45,7 +67,7 @@ const MainBodyRightPropertyArea = ({ activeTabDatas, setActiveTab }) => {
         <TemplatePropDataContainer />
       </TabPanel>
       <TabPanel forceRender={true}>
-        <PropertyComponent />
+        <ComponentPropDataContainer choiceType={tabChoiceType} />
       </TabPanel>
     </Tabs>
   );

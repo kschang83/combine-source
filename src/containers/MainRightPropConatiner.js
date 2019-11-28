@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { setActivePropTab } from "../modules/templatePropData";
+import { setActivePropTab } from "../modules/activePropTab";
 import MainBodyRightPropertyArea from "../components/MainBodyRightPropertyArea";
 
 const MainRightPropContainer = ({ activeTabDatas, setActivePropTab }) => {
@@ -14,7 +14,7 @@ const MainRightPropContainer = ({ activeTabDatas, setActivePropTab }) => {
 
 export default connect(
   state => ({
-    activeTabDatas: state.templatePropData.activeTabDatas
+    activeTabDatas: state.activePropTab.activeTabDatas
   }),
   { setActivePropTab }
 )(MainRightPropContainer);

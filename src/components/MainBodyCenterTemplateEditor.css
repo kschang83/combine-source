@@ -91,3 +91,36 @@
   text-align: center;
   word-break: break-all;
 }
+
+.innerCompoIsClick {
+  border: 2px dashed red;
+}
+
+.layerIcon {
+  position: absolute;
+  padding: 5px;
+  right: -75px;
+  margin-top: -30px;
+}
+
+.hidden {
+  display: none;
+}
+
+.layerIcon img {
+  width: 28px;
+  height: 28px;
+}
+
+.layerIcon .compoEdit {
+  width: 30px;
+  height: 30px;
+  float: right;
+  padding-right: 3px;
+}
+
+.layerIcon .compoDelete {
+  width: 30px;
+  height: 30px;
+  float: right;
+}
